@@ -6,7 +6,26 @@
                 <%= title %>                 
             </div>
             <div class="card-body">
-                <form action="" method="post">
+                <form action="/save" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <div class="row mb-3">
+                        <label for="name" class="col-sm-4 col-form-label">Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="name" id="name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="surname" class="col-sm-4 col-form-label">Surname:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="surname" id="surname" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="nick" class="col-sm-4 col-form-label">Nickname:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="nick" id="nick" class="form-control" />
+                        </div>
+                    </div>
                     <div class="row mb-3">
                         <label for="email" class="col-sm-4 col-form-label">Email:</label>
                         <div class="col-sm-8">

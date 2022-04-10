@@ -1,9 +1,10 @@
-import { Controller, Get, Render, Res } from '@nestjs/common';
+import { Controller, Get, Post, Redirect, Render, Req, Res } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { getRepository, Repository } from 'typeorm';
 import { AppService } from './app.service';
 import { Images, Users } from './entities'
+import { Users as UsersType, Login as LoginType } from './types'
 
 @Controller()
 export class AppController {
@@ -21,46 +22,39 @@ export class AppController {
 
   @Get()
   @Render('index')
-  index() {
+  index( @Req() request: Request ) {
+
     // to show variable in ejs return a object with props what you need
     return {
-      title: 'Login'
+      title: 'Login',
+      csrfToken: request.csrfToken() // csrf token send to view
     };
   }
+
 
   @Get('/register')
   @Render('register')
-  register() {
+  register( @Req() request: Request ) {
+
     return {
-      title: 'Register'
+      title: 'Register',
+      csrfToken: request.csrfToken()
     };
   }
 
-  /*@Get('/test')
-  async testOrm() {
+  @Post('/save')
+  save( @Req() request: Request, @Res() response: Response ) {
+    const form: UsersType & { _csrf: string } = request.body;
+    // validate from service
+    response.redirect('/')
+  }
+
+  @Post('/login')
+  @Redirect('/', 302)
+  login( @Req() request: Request, @Res() response: Response ) {
     
-    console.log('test de controller');
-
-    try {
-      // locate all users
-      const users = await this.userRepository.find({
-        order: {
-          id: 'DESC'
-        }
-      });
-
-      const images = await this.imageRepository.find({
-        order: {
-          id: 'DESC'
-        }
-      });
-
-      console.log( users );
-      console.log( images );
-      
-    } catch (error) {
-
-        console.error(error);
-    }
-  }*/
+    const form: LoginType & { _csrf: string } = request.body;
+    // validate from service
+    console.log( form );
+  }
 }
