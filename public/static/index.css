@@ -1,0 +1,45 @@
+:root {
+    --main-bg-color: #e0e0e0;
+    --font-card-title: 18px;
+}
+
+body {
+    background: var(--main-bg-color);
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.navbar .container {
+    padding: 10px;
+}
+
+.navbar .container ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar .container ul {
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+.navbar .container ul li {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.card-login {
+    margin-top: 3rem;
+    width: 50%;
+}
+
+.card-login .card-header {
+    padding: 15px 20px;
+    font-size: var(--font-card-title);
+}
+
+.card-login .card-body {
+    padding: 1rem 5rem;
+}
