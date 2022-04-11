@@ -3,9 +3,27 @@
         <div>
             <a class="navbar-brand" href="#">Nest JS Clontagram</a>
         </div>
-        <ul class="d-flex flex-row">
-            <li><a href="/">login</a></li>
-            <li><a href="/register">register</a></li>
-        </ul>
+        
+        <% if (userLogged) { %>
+
+            <ul class="d-flex flex-row">
+                <li class="dropdown">
+                    <a role="button" href="#" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle" id="dropUser">
+                        <%= userLogged.name %> <%= userLogged.surname %> 
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropUser">
+                        <li><a href="/logout" class="dropdown-item">Cerrar session</a> </li>
+                    </ul>
+                </li>
+            </ul>
+
+        <% } else { %>
+            
+            <ul class="d-flex flex-row">
+                <li><a href="/">Login</a></li>
+                <li><a href="/register">Register</a></li>
+            </ul>
+
+        <% } %> 
     </div>
   </nav>

@@ -1,6 +1,7 @@
-import { Users, Login } from './users.types'
+import { Users, Login, SessionData } from './types'
 
 export {
     Users,
-    Login
+    Login,
+    SessionData
 }

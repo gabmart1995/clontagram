@@ -1,10 +1,28 @@
 :root {
     --main-bg-color: #e0e0e0;
     --font-card-title: 18px;
+    --error-text: rgb(203, 11, 11);
+    --success-text: green;
 }
 
 body {
     background: var(--main-bg-color);
+}
+
+.error-text {
+    color: var(--error-text);
+    font-size: 12px;
+    padding: 3px;
+}
+
+.success-text {
+    color: var(--success-text);
+    font-size: 12px;
+    padding: 3px;
+}
+
+.error-field {
+    border-color: var(--error-text);
 }
 
 .pointer {
@@ -28,6 +46,14 @@ body {
 .navbar .container ul li {
     margin-left: 20px;
     margin-right: 20px;
+}
+
+.dropdown-menu .dropdown-item {
+    color: black !important;
+}
+
+.dropdown-menu .dropdown-item:active {
+    background: gainsboro;
 }
 
 .card-login {
