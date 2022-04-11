@@ -1,12 +1,16 @@
+// modules es7
 import { join } from 'path';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { AppModule } from './app.module';
 import * as csurf from 'csurf';
 import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
-import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
 
+// modules es5 import using require
+// import return undefined
+const flash = require('connect-flash')
 
 async function bootstrap() {
   
@@ -36,9 +40,10 @@ async function bootstrap() {
         }
       })
     )
+    .use( flash() )
     .use( cookieParser() )
     .use( csrfMiddleware );
-    
+  
   // ready server
   await app.listen(3000);
 }

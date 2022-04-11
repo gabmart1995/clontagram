@@ -3,6 +3,7 @@ import { Comments, Images, Likes } from '.'
 
 @Entity()
 export class Users {
+
     // id autoicrement
     @PrimaryGeneratedColumn() 
     id: number;
@@ -28,7 +29,7 @@ export class Users {
     @Column("varchar", { length: 255 })
     image: string;
 
-    @Column("datetime")
+    @Column("datetime", getDateTime())
     createdAt: string;
 
     @Column("datetime")
@@ -58,4 +59,16 @@ export class Users {
         ( comment ) => comment.user
     )
     comments: Comments[]
+}
+
+function getDateTime() {
+    
+    const date = new Date();
+    let dateTime = "" + date.getFullYear()
+    dateTime += "-" + ( date.getMonth() + 1 > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1) );
+    dateTime += "-" + ( date.getDate() > 9 ? date.getDate() : '0' + date.getDate() );
+    dateTime += " " + ( date.getHours() > 9 ? date.getHours() : '0' + date.getHours()); 
+    dateTime += ":" + ( date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds());
+    
+    return { default: dateTime };
 }

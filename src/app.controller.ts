@@ -24,10 +24,13 @@ export class AppController {
   @Render('index')
   index( @Req() request: Request ) {
 
+    const [ errors ] = request.flash('errors');
+
     // to show variable in ejs return a object with props what you need
     return {
       title: 'Login',
-      csrfToken: request.csrfToken() // csrf token send to view
+      csrfToken: request.csrfToken(), // csrf token send to view
+      errors
     };
   }
 
@@ -36,17 +39,34 @@ export class AppController {
   @Render('register')
   register( @Req() request: Request ) {
 
+    const [ errors ] = request.flash('errors');
+
+    // console.log( errors );
+
     return {
       title: 'Register',
-      csrfToken: request.csrfToken()
+      csrfToken: request.csrfToken(),
+      errors
     };
   }
 
   @Post('/save')
-  save( @Req() request: Request, @Res() response: Response ) {
+  async save( @Req() request: Request, @Res() response: Response ) {
+    
     const form: UsersType & { _csrf: string } = request.body;
-    // validate from service
-    response.redirect('/')
+    
+    try {
+      
+      const errors: any = await this.appService.insertUser( form );
+      request.flash('errors', errors);
+      
+      response.redirect('/');
+
+    } catch (errors) {
+      
+      request.flash('errors', errors);
+      response.redirect('/register');
+    }
   }
 
   @Post('/login')

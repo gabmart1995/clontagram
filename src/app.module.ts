@@ -3,14 +3,14 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Images, Users } from './entities';
+import { Users } from './entities';
 import { join } from 'path';
 
 
 @Module({
   imports: [ 
     TypeOrmModule.forRoot({ autoLoadEntities: true }),
-    // TypeOrmModule.forFeature([ Users, Images ]),
+    TypeOrmModule.forFeature([ Users ]),
     // server static configuration
     ServeStaticModule.forRoot({
       renderPath: (/^\w+\.ejs$/),  // path of render of views 
