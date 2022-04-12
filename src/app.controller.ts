@@ -92,7 +92,7 @@ export class AppController {
           console.error( error );
         }
 
-        response.redirect('/')
+        response.redirect('/user')
       });
 
     } catch (errors) {
@@ -111,7 +111,7 @@ export class AppController {
     if ( session.user ) {
       
       session.destroy(( error ) => {
-        
+
         if ( error ) {
           console.error( error );
         }

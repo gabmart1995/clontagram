@@ -18,12 +18,14 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const csrfMiddleware = csurf({ cookie: true });
 
-  // configure the views
-  app.useStaticAssets( join( __dirname, '..', 'public' ) );
+  // configure the views, static assets and engine 
+  app.useStaticAssets( join( __dirname, '..', 'public', 'static' ) );
+  app.setBaseViewsDir( join( __dirname, '..', 'public' ) )
+  app.setViewEngine('ejs')
   
   // configure engine template ejs
-  app.set('view engine', 'ejs');
-  app.set('views', 'public');
+  // app.set('view engine', 'ejs');
+  //app.set('views', 'public');
 
   // set forms, session, middlewares, cookies and csrf protection
   // important: parse forms y cookie parser before send csrfmiddleware 

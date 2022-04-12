@@ -1,26 +1,29 @@
-import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from './entities';
-import { join } from 'path';
-
+import { NoLoggedMiddleware } from './middleware';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [ 
     TypeOrmModule.forRoot({ autoLoadEntities: true }),
     TypeOrmModule.forFeature([ Users ]),
-    // server static configuration
-    ServeStaticModule.forRoot({
-      renderPath: (/^\w+\.ejs$/),  // path of render of views 
-      rootPath: join( __dirname, '..', 'public' ),
-      serveStaticOptions: {
-        extensions: ['html'] // extensions fallback if not found .ejs
-      }
-    })
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure( consumer: MiddlewareConsumer ) {
+    
+    // register middlewares
+    consumer
+      .apply(NoLoggedMiddleware)  
+      .forRoutes(
+        { path: '/', method: RequestMethod.GET },
+        { path: '/register', method: RequestMethod.GET }
+      )
+  }
+}

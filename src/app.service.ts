@@ -1,30 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { genSaltSync, hashSync } from 'bcryptjs';
 import { Users } from './entities';
 import { Users as UsersType, Login as LoginType } from './types';
-import { genSaltSync, hashSync } from 'bcryptjs';
+import { regex, ERROR_MESSAGES } from './helpers';
 
 @Injectable()
 export class AppService {
-
-  private regex = Object.freeze({
-    string: (/^[\w\s]{1,25}$/),
-    descriptionString: (/^[\w\.\,\s]{1,1000}$/),
-    emailString: (/^[a-z\_0-9]+@[a-z]{4,}\.[a-z]{3,}$/),
-    onlyNumbers: (/^[0-9]+$/),
-    password:  new RegExp( /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/ ) 
-  });
-
-  private ERROR_MESSAGES = Object.freeze({
-    required: 'campo requerido',
-    email: 'correo inválido',
-    min: ( min: number ) => 'minimo ' + min + ' caracteres',
-    max: ( max: number ) => 'máximo ' + max + ' caracteres',
-    pattern: 'Patrón de datos inválido',
-    notMatch: 'La contraseña no coincide',
-    patternPass: 'La contrasena debe incluir mayuscula, minusculas y numeros'
-  });
 
   constructor(
     @InjectRepository(Users)
@@ -38,39 +21,13 @@ export class AppService {
       reject: ( reason: { [key: string]: string } ) => void 
     ) => {
       
-      const errors: {[key: string]: string} = {};
-      
-      const errorsMap = new Map<string, string>();
-
-      if ( !this.regex.string.test(user.name) ) {
-        errorsMap.set('name', this.ERROR_MESSAGES.pattern);
-      }
-
-      if ( !this.regex.string.test(user.surname) ) {
-        errorsMap.set('surname', this.ERROR_MESSAGES.pattern);
-      }
-      
-      if ( !this.regex.emailString.test(user.email) ) {
-        errorsMap.set('email', this.ERROR_MESSAGES.email);
-      }
-
-      if ( user.password.length < 8 ) {
-        errorsMap.set('password', this.ERROR_MESSAGES.min(8));
-      }
-
-      if ( !this.regex.string.test(user.role) ) {
-        errorsMap.set('password', this.ERROR_MESSAGES.patternPass);
-      }
-
-      if ( !this.regex.string.test(user.nick) ) {
-        errorsMap.set('nick', this.ERROR_MESSAGES.pattern);
-      }
+      const errors: { [key: string]: string } = {};
+      const errorsMap = this.validatorUsers( user );
 
       if ( errorsMap.size > 0 ) {
-
         errorsMap.forEach(( value, key ) => { 
           errors[key] = value;
-        })
+        });
 
         reject( errors );
 
@@ -79,7 +36,7 @@ export class AppService {
 
       try {
         
-        // ecripted the pass ...
+        // encrypted the pass ...
         const salt = genSaltSync(4);
         user.password = hashSync( user.password, salt );
 
@@ -109,27 +66,17 @@ export class AppService {
     return new Promise( async ( resolve, reject: ( reason: {[key:string]: string} ) => void ) => {
       
       const errors: {[key: string]: string} = {};
-      const errorsMap: Map<string, string> = new Map();
-
-      if ( !this.regex.emailString.test(form.email) ) {
-        errorsMap.set('email', this.ERROR_MESSAGES.email);
-      }
-
-      if ( form.password.length < 8 ) {
-        errorsMap.set('password', this.ERROR_MESSAGES.min(8))
-      }
+      const errorsMap = this.validatorLogin(form);
 
       if ( errorsMap.size > 0 ) {
        
-        // console.log( errorsMap );
-
         errorsMap.forEach(( value, key ) => {
           errors[key] = value
         });
 
         reject( errors );
 
-        return
+        return;
       }
 
       try {
@@ -143,7 +90,7 @@ export class AppService {
 
         resolve( user );
         
-      } catch (error) {
+      } catch ( error ) {
         
         errorsMap.set('general', error.message);
 
@@ -154,5 +101,52 @@ export class AppService {
         reject( errors );
       }
     });
+  }
+
+
+  validatorUsers( user: UsersType ): Map<string, string> {
+
+    const errorsMap = new Map<string, string>();
+
+    if ( !regex.string.test(user.name) ) {
+      errorsMap.set('name', ERROR_MESSAGES.pattern);
+    }
+
+    if ( !regex.string.test(user.surname) ) {
+      errorsMap.set('surname', ERROR_MESSAGES.pattern);
+    }
+    
+    if ( !regex.emailString.test(user.email) ) {
+      errorsMap.set('email', ERROR_MESSAGES.email);
+    }
+
+    if ( user.password.length < 8 ) {
+      errorsMap.set('password', ERROR_MESSAGES.min(8));
+    }
+
+    if ( !regex.string.test(user.role) ) {
+      errorsMap.set('password', ERROR_MESSAGES.patternPass);
+    }
+
+    if ( !regex.string.test(user.nick) ) {
+      errorsMap.set('nick', ERROR_MESSAGES.pattern);
+    }
+
+    return errorsMap;
+  }
+
+  validatorLogin( form: LoginType ): Map<string, string> {
+    
+    const errorsMap = new Map<string, string>();
+
+    if ( !regex.emailString.test(form.email) ) {
+      errorsMap.set('email', ERROR_MESSAGES.email);
+    }
+
+    if ( form.password.length < 8 ) {
+      errorsMap.set('password', ERROR_MESSAGES.min(8))
+    }
+
+    return errorsMap;
   }
 }
