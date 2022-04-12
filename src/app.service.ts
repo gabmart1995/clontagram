@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { genSaltSync, hashSync } from 'bcryptjs';
+import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 import { Users } from './entities';
 import { Users as UsersType, Login as LoginType } from './types';
 import { regex, ERROR_MESSAGES } from './helpers';
@@ -82,9 +82,24 @@ export class AppService {
       try {
         
         const user = await this.userRepository.findOneOrFail({
-          select: [ 'id', 'name', 'surname', 'email', 'createdAt', 'updatedAt', 'role', 'rememberToken' ],
+          select: [ 'id', 'name', 'nick', 'password', 'surname', 'email', 'createdAt', 'updatedAt', 'role', 'rememberToken' ],
           where: { email: form.email }
         });
+
+        if ( !compareSync( form.password, user.password ) ) {
+          
+          errorsMap.set('general', 'Credenciales invalidas');
+
+          errorsMap.forEach(( value, key ) => {
+            errors[key] = value;
+          });
+
+          reject( errors );
+          
+          return 
+        }
+
+        delete user.password;
 
         // console.log( user );
 
@@ -115,6 +130,14 @@ export class AppService {
     if ( !regex.string.test(user.surname) ) {
       errorsMap.set('surname', ERROR_MESSAGES.pattern);
     }
+  
+    if ( !regex.string.test(user.role) ) {
+      errorsMap.set('password', ERROR_MESSAGES.patternPass);
+    }
+
+    if ( !regex.string.test(user.nick) ) {
+      errorsMap.set('nick', ERROR_MESSAGES.pattern);
+    }
     
     if ( !regex.emailString.test(user.email) ) {
       errorsMap.set('email', ERROR_MESSAGES.email);
@@ -124,12 +147,8 @@ export class AppService {
       errorsMap.set('password', ERROR_MESSAGES.min(8));
     }
 
-    if ( !regex.string.test(user.role) ) {
-      errorsMap.set('password', ERROR_MESSAGES.patternPass);
-    }
-
-    if ( !regex.string.test(user.nick) ) {
-      errorsMap.set('nick', ERROR_MESSAGES.pattern);
+    if ( user.confirm_password !== user.password ) {
+      errorsMap.set('confirm_password', ERROR_MESSAGES.notMatch);
     }
 
     return errorsMap;

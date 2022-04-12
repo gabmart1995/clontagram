@@ -8,6 +8,7 @@ export type Users = {
     nick: string
     email: string
     password: string
+    confirm_password?: string,
     image?: string
     createdAt?: string
     updatedAt?: string

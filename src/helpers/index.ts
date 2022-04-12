@@ -1,5 +1,7 @@
-import { regex, ERROR_MESSAGES } from './helpers';
+import { regex, ERROR_MESSAGES, getDateTime } from './helpers';
 
 export {
-    regex, ERROR_MESSAGES
+    regex, 
+    ERROR_MESSAGES,
+    getDateTime 
 }

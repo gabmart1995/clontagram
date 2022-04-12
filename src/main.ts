@@ -23,10 +23,6 @@ async function bootstrap() {
   app.setBaseViewsDir( join( __dirname, '..', 'public' ) )
   app.setViewEngine('ejs')
   
-  // configure engine template ejs
-  // app.set('view engine', 'ejs');
-  //app.set('views', 'public');
-
   // set forms, session, middlewares, cookies and csrf protection
   // important: parse forms y cookie parser before send csrfmiddleware 
   app

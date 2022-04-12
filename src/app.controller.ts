@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Redirect, Render, Req, Res, Session } from '@nestjs/common';
+import { Body, Controller, Get, Post, Render, Req, Res, Session } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AppService } from './app.service';
 import { Users as UsersType, Login as LoginType, SessionData } from './types'
@@ -58,6 +58,15 @@ export class AppController {
     @Res() response: Response 
   ) {
     
+    form = {
+      ...form,
+      name: form.name.trim(),
+      surname: form.surname.trim(),
+      email: form.email.trim(),
+      password: form.password.trim(),
+      nick: form.password.trim(),
+    };
+
     try {
       
       const message = await this.appService.insertUser( form );
@@ -79,7 +88,14 @@ export class AppController {
     @Res() response: Response, 
     @Session() session: SessionData 
   ) {
-      
+    
+    // clean blank spaces with trim
+    form = {
+      ...form,
+      email: form.email.trim(),
+      password: form.password.trim()
+    };
+
     try {
       
       const user = await this.appService.login( form );
@@ -116,8 +132,12 @@ export class AppController {
           console.error( error );
         }
 
-        response.redirect('/');
+        response.redirect('/')
       });
+
+      return;
     }
+
+    response.redirect('/');
   }
 }

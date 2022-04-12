@@ -16,7 +16,21 @@ const ERROR_MESSAGES = Object.freeze({
     patternPass: 'La contrasena debe incluir mayuscula, minusculas y numeros'
 });
 
+function getDateTime() {
+    
+    const date = new Date();
+    let dateTime = "" + date.getFullYear()
+    dateTime += "-" + ( date.getMonth() + 1 > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1) );
+    dateTime += "-" + ( date.getDate() > 9 ? date.getDate() : '0' + date.getDate() );
+    dateTime += " " + ( date.getHours() > 9 ? date.getHours() : '0' + date.getHours()); 
+    dateTime += ":" + ( date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds());
+    
+    return { default: dateTime };
+}
+
+
 export {
     regex,
-    ERROR_MESSAGES
+    ERROR_MESSAGES,
+    getDateTime
 }
