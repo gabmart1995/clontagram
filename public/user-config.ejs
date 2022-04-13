@@ -16,11 +16,19 @@
             </div>
         <% } %>
 
-        <div class="card card-login <%= (errors && errors.success ) || (errors && errors.general) ? 'mt-3' : 'mt-5' %>">
+        <div class="card card-login mb-5 <%= (errors && errors.success ) || (errors && errors.general) ? 'mt-3' : 'mt-5' %>">
             <div class="card-header">
                 Configuracion de mi cuenta               
             </div>
             <div class="card-body">
+
+                <!-- image -->
+                <% if (userLogged.image) { %>
+                    <div class="d-flex flex-row justify-content-center mt-4 mb-5">
+                        <img src="<%= userLogged.image %>" alt="Avatar" class="img-circle img-avatar" />
+                    </div>
+                <% } %>
+
                 <!-- pasamos csrf token desde el url del post como ruta alternativa -->
                 <!-- ya el body no procesa en form-data el csrfToken -->
                 <form action="/user/update?_csrf=<%= csrfToken %>" method="post" enctype="multipart/form-data">
@@ -78,7 +86,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <input type="hidden" name="_csrf" value="<%= csrfToken %>" /> -->
                 </form>
             </div>
         </div>

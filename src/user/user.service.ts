@@ -4,6 +4,7 @@ import { Users } from 'src/entities';
 import { Users as UsersType } from '../types'
 import { regex, ERROR_MESSAGES } from 'src/helpers';
 import { Repository } from 'typeorm';
+import { app } from 'src/main';
 
 @Injectable()
 export class UserService {
@@ -13,13 +14,17 @@ export class UserService {
   ) {}
 
   /** update the user logged */
-  update( form: Partial<Users>, file?: Express.Multer.File ): Promise<{ success: string }>  {
+  update( form: Partial<Users>, file?: Express.Multer.File ): Promise<{ success: string, user: Partial<Users> }>  {
 
     return new Promise( async ( resolve, reject: (reason: {[key:string]: string}) => void ) => {
 
       const errors: {[key:string]: string} = {};
       const errorsMap = this.validatorUsers(form);
       
+      // create url of store in db format ipv6
+      let url: URL;
+      let payload = { ...form };
+
       if ( file ) {
         
         const errorsFile = this.validateImage(file);
@@ -37,13 +42,19 @@ export class UserService {
             errors[key] = value;
           });
           
-          console.log( errors );
+          // console.log( errors );
 
           reject( errors );
   
           return;
         }
-      
+        
+        // create the url
+        url = new URL('/uploads/' + file.filename, ( await app.getUrl() ));
+        
+        // in case of new Image override the field
+        payload.image = url.toString();
+
       } else {
 
         if ( errorsMap.size > 0 ) {
@@ -59,13 +70,16 @@ export class UserService {
         }
       } 
 
-      /*try {
+      try {
         
-        // console.log( form );
+        // console.log( url );
 
-        await this.userRepository.update(form.id, form);
+        await this.userRepository.update( payload.id, payload );
 
-        resolve({ success: 'Usuario actualizado con exito' });
+        resolve({ 
+          success: 'Usuario actualizado con exito', 
+          user: payload 
+        });
 
       } catch (error) {
         
@@ -76,7 +90,7 @@ export class UserService {
         });
 
         reject( errors );
-      }*/
+      }
     });
 
   }

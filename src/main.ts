@@ -7,15 +7,18 @@ import * as csurf from 'csurf';
 import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
+import { INestApplication } from '@nestjs/common';
 
 // modules es5 import using require
 // import return undefined
 const flash = require('connect-flash')
+// export app info 
+let app: INestApplication & NestExpressApplication;
 
 async function bootstrap() {
   
   // indicate a express app
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app = await NestFactory.create<NestExpressApplication>(AppModule);
   const csrfMiddleware = csurf({ cookie: true });
 
   // configure the views, static assets and engine 
@@ -47,3 +50,5 @@ async function bootstrap() {
 }
 
 bootstrap();
+
+export { app }; 

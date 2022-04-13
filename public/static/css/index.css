@@ -9,6 +9,15 @@ body {
     background: var(--main-bg-color);
 }
 
+.img-avatar {
+    max-height: 150px;
+    max-width: 150px;
+}
+
+.img-circle {
+    border-radius: 100%;
+}
+
 .error-text {
     color: var(--error-text);
     font-size: 14px;

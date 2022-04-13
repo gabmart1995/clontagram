@@ -13,7 +13,8 @@ export class UserController {
   @Get()
   @Render('user')
   index( @Session() session: SessionData ) {
-    
+  
+
     // to show variable in ejs return a object with props what you need
     return {
       title: 'User',
@@ -27,7 +28,7 @@ export class UserController {
     
     const [ errors ] = request.flash('errors');
     
-    // console.log( session.user );
+    console.log( session.user );
 
     return {
       title: 'Configuration',
@@ -37,7 +38,9 @@ export class UserController {
     };
   }
 
-  // fileInterceptor obtiene el archivo del 
+
+  // partial permite pasar partes de las propiedades de una interface o tipo
+  // sin saltar el compilador 
   @Post('/update')
   @UseInterceptors(FileInterceptor('image_path'))
   async update( 
@@ -47,9 +50,7 @@ export class UserController {
     @Res() response: Response, 
     @Session() session: SessionData  
   ) {
-    
-    // partial permite pasar partes de las propiedades de una interface o tipo
-    // sin saltar el compilador 
+  
     console.log({ form, file });
 
     const { default: dateTime } = getDateTime();
@@ -59,17 +60,16 @@ export class UserController {
       email: form.email.trim(),
       nick: form.nick.trim(),
       updatedAt: dateTime.trim(),
-      id: session.user.id as number
+      id: session.user.id as number,
+      image: session.user.image 
      });
 
     try {
       
-      const message = await this.userService.update( data, file );
+      const { success, user } = await this.userService.update( data, file );
 
-      request.flash('errors', JSON.stringify( message ));
-
-      session.user = data; 
-
+      request.flash('errors', JSON.stringify({ success }));
+      session.user = user; 
       session.save(( error ) => {
         
         if ( error ) {
