@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Redirect, Render, Req, Res, Session } from '@nestjs/common';
+import { Body, Controller, Get, Post, Redirect, Render, Req, Res, Session, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { getDateTime } from 'src/helpers';
 import { SessionData, Users as UsersType } from 'src/types';
@@ -36,8 +37,11 @@ export class UserController {
     };
   }
 
+  // fileInterceptor obtiene el archivo del 
   @Post('/update')
+  @UseInterceptors(FileInterceptor('image_path'))
   async update( 
+    @UploadedFile() file: Express.Multer.File,
     @Body() form: Partial<UsersType>, 
     @Req() request: Request, 
     @Res() response: Response, 
@@ -46,6 +50,7 @@ export class UserController {
     
     // partial permite pasar partes de las propiedades de una interface o tipo
     // sin saltar el compilador 
+    console.log({ form, file });
 
     const { default: dateTime } = getDateTime();
     const data = Object.freeze({ 
@@ -58,7 +63,8 @@ export class UserController {
      });
 
     try {
-      const message = await this.userService.update( data );
+      
+      const message = await this.userService.update( data, file );
 
       request.flash('errors', JSON.stringify( message ));
 

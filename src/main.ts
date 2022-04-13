@@ -26,7 +26,7 @@ async function bootstrap() {
   // set forms, session, middlewares, cookies and csrf protection
   // important: parse forms y cookie parser before send csrfmiddleware 
   app
-    .use( bodyParser.urlencoded({ extended: false }) )
+    .use( bodyParser.urlencoded({ extended: true }) )
     .use( 
       session({
         name: 'nest session',

@@ -11,13 +11,13 @@ body {
 
 .error-text {
     color: var(--error-text);
-    font-size: 12px;
+    font-size: 14px;
     padding: 3px;
 }
 
 .success-text {
     color: var(--success-text);
-    font-size: 12px;
+    font-size: 14px;
     padding: 3px;
 }
 
@@ -57,7 +57,7 @@ body {
 }
 
 .card-login {
-    margin-top: 3rem;
+    /* margin-top: 1rem; */
     width: 50%;
 }
 

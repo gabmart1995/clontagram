@@ -1,13 +1,16 @@
+import { join } from 'path';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/entities';
 import { LoggedMiddleware } from 'src/middleware';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
+
 @Module({
     imports: [
-        TypeOrmModule.forFeature([ Users ])
+        TypeOrmModule.forFeature([ Users ]),
     ],
     controllers: [UserController],
     providers: [UserService]

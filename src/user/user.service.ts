@@ -12,25 +12,54 @@ export class UserService {
     private readonly userRepository: Repository<Users>
   ) {}
 
-  update( form: Partial<Users> ): Promise<{ success: string }>  {
+  /** update the user logged */
+  update( form: Partial<Users>, file?: Express.Multer.File ): Promise<{ success: string }>  {
 
     return new Promise( async ( resolve, reject: (reason: {[key:string]: string}) => void ) => {
 
       const errors: {[key:string]: string} = {};
       const errorsMap = this.validatorUsers(form);
+      
+      if ( file ) {
+        
+        const errorsFile = this.validateImage(file);
+        
+        if (
+            (errorsMap.size > 0 && errorsFile.size > 0) || 
+            (errorsMap.size > 0 || errorsFile.size > 0) 
+          ) {
+  
+          errorsMap.forEach(( value, key ) => {
+            errors[key] = value;
+          });
+  
+          errorsFile.forEach(( value, key ) => {
+            errors[key] = value;
+          });
+          
+          console.log( errors );
 
-      if ( errorsMap.size > 0 ) {
+          reject( errors );
+  
+          return;
+        }
+      
+      } else {
 
-        errorsMap.forEach(( value, key ) => {
-          errors[key] = value;
-        });
+        if ( errorsMap.size > 0 ) {
 
-        reject( errors );
+          errorsMap.forEach(( value, key ) => {
+            errors[key] = value;
+          });
 
-        return;
-      }
+    
+          reject( errors );
 
-      try {
+          return;
+        }
+      } 
+
+      /*try {
         
         // console.log( form );
 
@@ -47,11 +76,12 @@ export class UserService {
         });
 
         reject( errors );
-      }
+      }*/
     });
 
   }
 
+  /** function of validation of partial users */
   validatorUsers( user: Partial<UsersType> ): Map<string, string> {
 
     const errorsMap = new Map<string, string>();
@@ -74,6 +104,23 @@ export class UserService {
     
     if ( !regex.emailString.test(user.email) ) {
       errorsMap.set('email', ERROR_MESSAGES.email);
+    }
+
+    return errorsMap;
+  }
+
+  validateImage( file: Express.Multer.File ): Map<string, string> {
+
+    const errorsMap = new Map<string, string>();
+    const extensions = ['image/png', 'image/jpeg', 'image/jpg'];
+    const limit = 1e6; // notacion cientifica 1000000 = 1e6
+
+    if ( !extensions.includes( file.mimetype ) ) {
+      errorsMap.set('image_path', 'Extension de archivo no valido');
+    }
+
+    if ( file.size > limit ) {
+      errorsMap.set('image_path', 'Maximo 1mb')
     }
 
     return errorsMap;

@@ -1,8 +1,10 @@
 import { getDateTime } from "src/helpers";
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from "typeorm";
 import { Comments, Images, Likes } from '.'
 
 @Entity()
+@Unique('email-unique', ['email'])
+@Unique('nick-unique', ['nick'])
 export class Users {
 
     // id autoicrement
