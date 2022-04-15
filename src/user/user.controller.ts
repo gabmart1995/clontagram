@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Redirect, Render, Req, Res, Session, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Catch, Controller, Get, Post, Redirect, Render, Req, Res, Session, UploadedFile, UseFilters, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
+import { FileExceptionFilter } from 'src/exceptions/file-exception.filter';
 import { getDateTime } from 'src/helpers';
 import { app } from 'src/main';
 import { SessionData, Users as UsersType } from 'src/types';
@@ -12,7 +13,7 @@ export class UserController {
   constructor( private userService: UserService ) {}
 
   @Get()
-  @Render('user')
+  @Render('home')
   index( @Session() session: SessionData ) {
   
 
@@ -24,26 +25,24 @@ export class UserController {
   }
 
   @Get('/config')
-  @Render('user-config')
+  @Render('config')
   async config( @Session() session: SessionData, @Req() request: Request ) {
     
     const [ errors ] = request.flash('errors');
-    const userLogged = { ...session.user };
-
-    console.log( userLogged );
+    const userLogged = { ...session.user as UsersType };
 
     // get image in path in db user if not exists
     if ( !userLogged.image ) {
-
       
       try {
         const image = await this.userService.getUserAvatar( session.user.id as number );        
-        console.log(image)
         userLogged.image = image;
+        
+        // console.log(image)
   
       } catch ( error ) {
         
-        userLogged.image = new URL('/image/no-image-icon.png', ( await app.getUrl() ));
+        userLogged.image = new URL('/image/no-image-icon.png', ( await app.getUrl() )).toString();
         console.error( error );
       }
     }
@@ -61,6 +60,7 @@ export class UserController {
   // sin saltar el compilador 
   @Post('/update')
   @UseInterceptors(FileInterceptor('image_path'))
+  @UseFilters( FileExceptionFilter )
   async update( 
     @UploadedFile() file: Express.Multer.File,
     @Body() form: Partial<UsersType>, 

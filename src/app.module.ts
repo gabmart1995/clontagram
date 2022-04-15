@@ -5,12 +5,14 @@ import { AppService } from './app.service';
 import { Users } from './entities';
 import { NoLoggedMiddleware } from './middleware';
 import { UserModule } from './user/user.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [ 
     TypeOrmModule.forRoot({ autoLoadEntities: true }),
     TypeOrmModule.forFeature([ Users ]),
     UserModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

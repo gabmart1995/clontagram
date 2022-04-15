@@ -1,0 +1,26 @@
+<%- include('../partials/header', { title })  %> 
+<%- include('../partials/navbar', { userLogged }) %>
+    
+    <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
+            
+        <div class="card card-login mb-5 mt-5">
+            <div class="card-header">
+                Subir nueva imagen               
+            </div>
+            <div class="card-body">
+
+                <!-- pasamos csrf token desde el url del post como ruta alternativa -->
+                <!-- ya el body no procesa en form-data el csrfToken -->
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <label for="image_path" class="col-sm-4 col-form-label">Imagen:</label>
+                        <div class="col-sm-7">
+                            <input type="file" required name="image_path" id="image_path" class="form-control" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<%- include('../partials/footer') %>
