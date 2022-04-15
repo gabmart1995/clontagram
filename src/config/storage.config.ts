@@ -43,5 +43,5 @@ export const CONFIG_STORAGE_USERS: MulterOptions = {
     const extentions = ['image/png', 'image/jpeg', 'image/jpg'];
     
     callback( null, extentions.includes( file.mimetype ));
-  }
+  },
 };

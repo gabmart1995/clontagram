@@ -10,8 +10,15 @@ body {
 }
 
 .img-avatar {
-    max-height: 120px;
-    max-width: 120px;
+    height: 100%;
+    width: 100%;
+}
+
+.conatainer-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 900px;
+    overflow: hidden;
 }
 
 .img-circle {

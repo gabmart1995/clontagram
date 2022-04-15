@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Redirect, Render, Req, Res, Session, Uploa
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { getDateTime } from 'src/helpers';
+import { app } from 'src/main';
 import { SessionData, Users as UsersType } from 'src/types';
 import { UserService } from './user.service';
 
@@ -29,15 +30,22 @@ export class UserController {
     const [ errors ] = request.flash('errors');
     const userLogged = { ...session.user };
 
-    // get image user
-    try {
-      const image = await this.userService.getUserAvatar( session.user.id as number );
-      userLogged.image = image;
+    console.log( userLogged );
 
-    } catch ( error ) {
+    // get image in path in db user if not exists
+    if ( !userLogged.image ) {
+
       
-      userLogged.image = null;
-      console.error( error );
+      try {
+        const image = await this.userService.getUserAvatar( session.user.id as number );        
+        console.log(image)
+        userLogged.image = image;
+  
+      } catch ( error ) {
+        
+        userLogged.image = new URL('/image/no-image-icon.png', ( await app.getUrl() ));
+        console.error( error );
+      }
     }
 
     return {
@@ -76,9 +84,19 @@ export class UserController {
 
     try {
       
-      const { success } = await this.userService.update( data, file );
+      const { success, user } = await this.userService.update( data, file );
 
       request.flash('errors', JSON.stringify({ success }));
+
+      session.user = user;
+      session.save(( error ) => {
+
+        if ( error ) {
+          console.error( error );
+        }
+
+        response.redirect('/user/config');
+      });
 
     } catch (errors) {
 

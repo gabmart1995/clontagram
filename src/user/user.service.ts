@@ -14,7 +14,7 @@ export class UserService {
   ) {}
 
   /** update the user logged */
-  update( form: Partial<Users>, file?: Express.Multer.File ): Promise<{ success: string }>  {
+  update( form: Partial<Users>, file?: Express.Multer.File ): Promise<{ success: string, user: Partial<Users> }>  {
 
     return new Promise( async ( resolve, reject: (reason: {[key:string]: string}) => void ) => {
 
@@ -75,7 +75,8 @@ export class UserService {
         await this.userRepository.update( payload.id, payload );
 
         resolve({ 
-          success: 'Usuario actualizado con exito'
+          success: 'Usuario actualizado con exito',
+          user: payload
         });
 
       } catch (error) {
@@ -102,7 +103,12 @@ export class UserService {
           select: ['image'],
           where: { id }
         });
-  
+        
+        if ( user.image.length === 0 ) {
+          resolve( new URL('/image/no-image-icon.png', (await app.getUrl())).toString() )
+          return;
+        }
+        
         resolve( user.image );
 
       } catch (error) {

@@ -5,6 +5,7 @@ import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 import { Users } from './entities';
 import { Users as UsersType, Login as LoginType } from './types';
 import { regex, ERROR_MESSAGES } from './helpers';
+import { app } from './main';
 
 @Injectable()
 export class AppService {
@@ -82,7 +83,7 @@ export class AppService {
       try {
         
         const user = await this.userRepository.findOneOrFail({
-          select: [ 'id', 'name', 'nick', 'password', 'surname', 'email', 'createdAt', 'updatedAt', 'role', 'rememberToken' ],
+          select: [ 'id', 'name', 'nick', 'password', 'surname', 'email', 'createdAt', 'updatedAt', 'role', 'rememberToken', 'image' ],
           where: { email: form.email }
         });
 
@@ -100,6 +101,10 @@ export class AppService {
         }
 
         delete user.password;
+
+        if ( user.image.length === 0 ) {
+          user.image = new URL('/image/no-image-icon.png', (await app.getUrl())).toString();
+        }
 
         // console.log( user );
 

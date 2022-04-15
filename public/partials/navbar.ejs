@@ -6,7 +6,7 @@
         
         <% if (userLogged) { %>
 
-            <ul class="d-flex flex-row">
+            <ul class="d-flex flex-row align-items-center">
                 <li><a href="">Incio</a></li>
                 <li><a href="">Subir imagen</a></li>
                 <li class="dropdown">
@@ -19,10 +19,12 @@
                         <li><a href="/logout" class="dropdown-item">Cerrar sesion</a> </li>
                     </ul>
                 </li>
+                <li>
+                    <!-- image -->
+                    <%- include('avatar', { userLogged }) %>
+                </li>
             </ul>
 
-            <!-- image -->
-            <%- include('avatar') %>
 
         <% } else { %>
             
