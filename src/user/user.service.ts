@@ -14,7 +14,7 @@ export class UserService {
   ) {}
 
   /** update the user logged */
-  update( form: Partial<Users>, file?: Express.Multer.File ): Promise<{ success: string, user: Partial<Users> }>  {
+  update( form: Partial<Users>, file?: Express.Multer.File ): Promise<{ success: string }>  {
 
     return new Promise( async ( resolve, reject: (reason: {[key:string]: string}) => void ) => {
 
@@ -50,9 +50,7 @@ export class UserService {
         }
         
         // create the url
-        url = new URL('/uploads/' + file.filename, ( await app.getUrl() ));
-        
-        // in case of new Image override the field
+        url = new URL('/uploads/users/' + file.filename, ( await app.getUrl() ));
         payload.image = url.toString();
 
       } else {
@@ -77,8 +75,7 @@ export class UserService {
         await this.userRepository.update( payload.id, payload );
 
         resolve({ 
-          success: 'Usuario actualizado con exito', 
-          user: payload 
+          success: 'Usuario actualizado con exito'
         });
 
       } catch (error) {
@@ -93,6 +90,28 @@ export class UserService {
       }
     });
 
+  }
+
+  getUserAvatar( id: number ): Promise<string> {
+    
+    return new Promise( async ( resolve, reject ) => {
+
+      try {
+        
+        const user = await this.userRepository.findOneOrFail({
+          select: ['image'],
+          where: { id }
+        });
+  
+        resolve( user.image );
+
+      } catch (error) {
+        
+        console.log( error );
+
+        reject( error );
+      }
+    });
   }
 
   /** function of validation of partial users */

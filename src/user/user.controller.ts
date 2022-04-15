@@ -24,15 +24,25 @@ export class UserController {
 
   @Get('/config')
   @Render('user-config')
-  config( @Session() session: SessionData, @Req() request: Request ) {
+  async config( @Session() session: SessionData, @Req() request: Request ) {
     
     const [ errors ] = request.flash('errors');
-    
-    console.log( session.user );
+    const userLogged = { ...session.user };
+
+    // get image user
+    try {
+      const image = await this.userService.getUserAvatar( session.user.id as number );
+      userLogged.image = image;
+
+    } catch ( error ) {
+      
+      userLogged.image = null;
+      console.error( error );
+    }
 
     return {
       title: 'Configuration',
-      userLogged: session.user,
+      userLogged,
       csrfToken: request.csrfToken(),
       errors: errors ? JSON.parse(errors) : undefined
     };
@@ -51,7 +61,7 @@ export class UserController {
     @Session() session: SessionData  
   ) {
   
-    console.log({ form, file });
+    // console.log({ form, file });
 
     const { default: dateTime } = getDateTime();
     const data = Object.freeze({ 
@@ -66,18 +76,9 @@ export class UserController {
 
     try {
       
-      const { success, user } = await this.userService.update( data, file );
+      const { success } = await this.userService.update( data, file );
 
       request.flash('errors', JSON.stringify({ success }));
-      session.user = user; 
-      session.save(( error ) => {
-        
-        if ( error ) {
-          console.error( error );
-        }
-
-        response.redirect('/user/config');
-      });
 
     } catch (errors) {
 

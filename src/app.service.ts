@@ -82,7 +82,7 @@ export class AppService {
       try {
         
         const user = await this.userRepository.findOneOrFail({
-          select: [ 'id', 'name', 'nick', 'password', 'surname', 'email', 'createdAt', 'updatedAt', 'role', 'rememberToken', 'image' ],
+          select: [ 'id', 'name', 'nick', 'password', 'surname', 'email', 'createdAt', 'updatedAt', 'role', 'rememberToken' ],
           where: { email: form.email }
         });
 

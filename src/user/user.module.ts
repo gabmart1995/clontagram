@@ -5,13 +5,13 @@ import { Users } from 'src/entities';
 import { LoggedMiddleware } from 'src/middleware';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { CONFIG_STORAGE } from 'src/config/storage.config';
+import { CONFIG_STORAGE_USERS } from 'src/config/storage.config';
 
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([ Users ]),
-        MulterModule.register( CONFIG_STORAGE )
+        MulterModule.register( CONFIG_STORAGE_USERS )
     ],
     controllers: [UserController],
     providers: [UserService]
