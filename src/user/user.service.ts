@@ -1,13 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from 'src/entities';
-import { Users as UsersType } from '../types'
-import { regex, ERROR_MESSAGES } from 'src/helpers';
 import { Repository } from 'typeorm';
+import { Users } from '../entities';
+import { Users as UsersType } from '../types'
+import { regex, ERROR_MESSAGES, getFileName, saveImages } from '../helpers';
 import { app } from 'src/main';
+import { join } from 'path';
 
 @Injectable()
 export class UserService {
+
+  private storagePath = join( 
+    process.cwd(), 
+    'public', 
+    'static', 
+    'uploads', 
+    'users'  
+  );
+
   constructor(
     @InjectRepository(Users)
     private readonly userRepository: Repository<Users>
@@ -20,7 +30,7 @@ export class UserService {
 
       const errors: {[key:string]: string} = {};
       const errorsMap = this.validatorUsers(form);
-      
+    
       // create url of store in db format ipv6
       let url: URL;
       let payload = { ...form };
@@ -28,7 +38,7 @@ export class UserService {
       if ( file ) {
         
         const errorsFile = this.validateImage(file);
-        
+
         if (
             (errorsMap.size > 0 && errorsFile.size > 0) || 
             (errorsMap.size > 0 || errorsFile.size > 0) 
@@ -50,8 +60,13 @@ export class UserService {
         }
         
         // create the url
-        url = new URL('/uploads/users/' + file.filename, ( await app.getUrl() ));
+        const fileName = getFileName( file );
+
+        url = new URL('/uploads/users/' + fileName, ( await app.getUrl() ));
         payload.image = url.toString();
+
+        // save to image
+        saveImages( file.buffer, join( this.storagePath, fileName ) );
 
       } else {
 
@@ -73,7 +88,7 @@ export class UserService {
         // console.log( url );
 
         await this.userRepository.update( payload.id, payload );
-
+      
         resolve({ 
           success: 'Usuario actualizado con exito',
           user: payload

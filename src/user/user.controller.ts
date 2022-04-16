@@ -1,7 +1,6 @@
-import { Body, Catch, Controller, Get, Post, Redirect, Render, Req, Res, Session, UploadedFile, UseFilters, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Render, Req, Res, Session, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
-import { FileExceptionFilter } from 'src/exceptions/file-exception.filter';
 import { getDateTime } from 'src/helpers';
 import { app } from 'src/main';
 import { SessionData, Users as UsersType } from 'src/types';
@@ -47,6 +46,8 @@ export class UserController {
       }
     }
 
+    // console.log( userLogged );
+
     return {
       title: 'Configuration',
       userLogged,
@@ -60,7 +61,6 @@ export class UserController {
   // sin saltar el compilador 
   @Post('/update')
   @UseInterceptors(FileInterceptor('image_path'))
-  @UseFilters( FileExceptionFilter )
   async update( 
     @UploadedFile() file: Express.Multer.File,
     @Body() form: Partial<UsersType>, 
@@ -70,7 +70,7 @@ export class UserController {
   ) {
   
     // console.log({ form, file });
-
+    
     const { default: dateTime } = getDateTime();
     const data = Object.freeze({ 
       name: form.name.trim(),

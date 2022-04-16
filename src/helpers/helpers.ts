@@ -1,3 +1,5 @@
+import { writeFile } from "fs";
+
 const regex = Object.freeze({
     string: (/^[\w\s]{1,25}$/),
     descriptionString: (/^[\w\.\,\s]{1,1000}$/),
@@ -18,19 +20,52 @@ const ERROR_MESSAGES = Object.freeze({
 
 function getDateTime() {
     
-    const date = new Date();
-    let dateTime = "" + date.getFullYear()
-    dateTime += "-" + ( date.getMonth() + 1 > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1) );
-    dateTime += "-" + ( date.getDate() > 9 ? date.getDate() : '0' + date.getDate() );
-    dateTime += " " + ( date.getHours() > 9 ? date.getHours() : '0' + date.getHours()); 
-    dateTime += ":" + ( date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds());
-    
-    return { default: dateTime };
+  const date = new Date();
+  let dateTime = "" + date.getFullYear()
+  dateTime += "-" + ( date.getMonth() + 1 > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1) );
+  dateTime += "-" + ( date.getDate() > 9 ? date.getDate() : '0' + date.getDate() );
+  dateTime += " " + ( date.getHours() > 9 ? date.getHours() : '0' + date.getHours()); 
+  dateTime += ":" + ( date.getSeconds() > 9 ? date.getSeconds() : '0' + date.getSeconds());
+  
+  return { default: dateTime };
 }
 
+function saveImages( data: Buffer, destination: string ) {
+    
+  writeFile( destination, data, ( error: NodeJS.ErrnoException ) => {
+    if ( error ) {
+      console.error( error );
+    }
+  });
+}
+
+function getFileName( file: Express.Multer.File ): string {
+      
+  const uniqueSuffix = Date.now() + '-' + Math.round( Math.random() * 1e9 )
+  let name = file.fieldname + '-' + uniqueSuffix;
+
+  switch ( file.mimetype ) {
+      
+      case 'image/png':
+          name += '.png';
+          break;
+
+      case 'image/jpeg':
+          name += '.jpeg';
+          break;
+
+      default:
+          name += '.jpg';
+          break;
+  }
+
+  return name;
+}
 
 export {
-    regex,
-    ERROR_MESSAGES,
-    getDateTime
+  regex,
+  ERROR_MESSAGES,
+  getDateTime,
+  saveImages,
+  getFileName
 }
