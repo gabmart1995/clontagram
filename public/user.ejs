@@ -4,11 +4,27 @@
 <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
     
     <!-- alerts -->
-    <% if (errors && errors.success ) { %>
-        <div class="alert alert-success w-50 mt-4" role="alert">
-            <div class="success-text"><%= errors.success %></div>
+    <%- include('partials/message', { errors }) %>
+    
+    <% images.forEach( image => { %>
+
+        <div class="card card-login mb-2">
+            <div class="card-header">
+              <div class="container-avatar">
+                <img src="<%= image.user.image %>" alt="avatar" class="img-avatar" />
+                <% if (image.user.image) { %>
+                 
+                <% } else { %>
+                  <img src="http://localhost:3000/image/no-image-icon.png" alt="avatar" class="img-avatar" />
+                
+                <% } %>
+
+              </div>  
+              <%= ( image.user.name + ' ' + image.user.surname )  %>
+            </div>
         </div>
-    <% } %>
+
+    <% }) %>
     
 </div>
 

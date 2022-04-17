@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ERROR_MESSAGES, getFileName, regex, saveImages } from 'src/helpers';
 import { app } from 'src/main';
-import { Image as ImageType } from 'src/types';
+import { Image, Image as ImageType } from 'src/types';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
-import { Images, } from '../entities'
+import { Images, Users, } from '../entities'
 
 @Injectable()
 export class ImageService {
@@ -75,6 +75,15 @@ export class ImageService {
       }
     });
   }
+
+  getImagesUser(): Promise<Image[]> {
+    return this.imageRepository.find({
+      order: {
+        id: 'DESC'
+      },
+      relations: ['user'] // indica que relaciones deseas cargar debes pasar la prop de la relacion
+    }); 
+  } 
   
   validateForm( form: Partial<ImageType> ) {
     

@@ -2,26 +2,51 @@ import { Body, Controller, Get, Post, Render, Req, Res, Session, UploadedFile, U
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { getDateTime } from 'src/helpers';
+import { ImageService } from 'src/image/image.service';
 import { app } from 'src/main';
-import { SessionData, Users as UsersType } from 'src/types';
+import { Image as ImageType, SessionData, Users as UsersType } from 'src/types';
 import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
   
-  constructor( private userService: UserService ) {}
+  constructor( 
+    private userService: UserService, 
+    private imageService: ImageService  
+  ) {}
 
   @Get()
   @Render('user')
-  index( @Session() session: SessionData, @Req() request: Request ) {
+  async index( @Session() session: SessionData, @Req() request: Request ) {
     
     const [ errors ] = request.flash('errors');
+    let images: ImageType[];
+
+    // consultamos las imagenes 
+    try {
+      images = await this.imageService.getImagesUser();
+
+      images = images.map(( image ) => {
+        
+        if ( !image.user.image ) {
+          image.user.image = new URL('/image/no-image-icon.png', 'http://localhost:3000').toString()
+        }
+        
+        return image;
+      })
+
+    } catch ( error ) {
+      images = [];
+      console.error( error );
+    }
+
 
     // to show variable in ejs return a object with props what you need
     return {
       title: 'User',
       userLogged: session.user,
-      errors: errors ? JSON.parse(errors) : undefined
+      errors: errors ? JSON.parse(errors) : undefined,
+      images
     };
   }
 
