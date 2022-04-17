@@ -1,0 +1,12 @@
+<!-- alerts -->
+<% if (errors && errors.success ) { %>
+    <div class="alert alert-success w-50 mt-4" role="alert">
+        <div class="success-text"><%= errors.success %></div>
+    </div>
+<% } %>
+
+<% if (errors && errors.general) { %>
+    <div class="alert alert-danger w-50 mt-4" role="alert">
+        <div class="error-text"><%= errors.general %></div>
+    </div>
+<% } %>

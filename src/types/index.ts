@@ -1,7 +1,8 @@
-import { Users, Login, SessionData } from './types'
+import { Users, Login, SessionData, Image } from './types'
 
 export {
     Users,
     Login,
-    SessionData
+    SessionData,
+    Image
 }

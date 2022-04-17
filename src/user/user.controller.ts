@@ -12,14 +12,16 @@ export class UserController {
   constructor( private userService: UserService ) {}
 
   @Get()
-  @Render('home')
-  index( @Session() session: SessionData ) {
-  
+  @Render('user')
+  index( @Session() session: SessionData, @Req() request: Request ) {
+    
+    const [ errors ] = request.flash('errors');
 
     // to show variable in ejs return a object with props what you need
     return {
       title: 'User',
-      userLogged: session.user
+      userLogged: session.user,
+      errors: errors ? JSON.parse(errors) : undefined
     };
   }
 

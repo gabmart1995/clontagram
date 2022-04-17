@@ -66,7 +66,22 @@ export class UserService {
         payload.image = url.toString();
 
         // save to image
-        saveImages( file.buffer, join( this.storagePath, fileName ) );
+
+        try {
+          await saveImages( file.buffer, join( this.storagePath, fileName ) );
+          
+        } catch ( error ) {
+          
+          errorsMap.set('general', error.message);
+
+          errorsMap.forEach(( value, key ) => {
+            errors[key] = value;
+          });
+
+          reject( errors );
+
+          return;
+        }
 
       } else {
 
@@ -106,6 +121,15 @@ export class UserService {
       }
     });
 
+  }
+
+  getUser( id: number ) {
+    return this.userRepository.findOneOrFail({
+      select: ['id', 'name', 'surname', 'email', 'nick'],
+      where: {
+        id
+      }
+    });
   }
 
   getUserAvatar( id: number ): Promise<string> {

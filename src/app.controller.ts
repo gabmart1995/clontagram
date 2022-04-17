@@ -64,7 +64,7 @@ export class AppController {
       surname: form.surname.trim(),
       email: form.email.trim(),
       password: form.password.trim(),
-      nick: form.password.trim(),
+      nick: form.nick.trim(),
     };
 
     try {

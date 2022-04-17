@@ -1,4 +1,4 @@
-import { writeFile } from "fs";
+import { writeFile } from "fs/promises";
 
 const regex = Object.freeze({
     string: (/^[\w\s]{1,25}$/),
@@ -15,7 +15,9 @@ const ERROR_MESSAGES = Object.freeze({
     max: ( max: number ) => 'máximo ' + max + ' caracteres',
     pattern: 'Patrón de datos inválido',
     notMatch: 'La contraseña no coincide',
-    patternPass: 'La contrasena debe incluir mayuscula, minusculas y numeros'
+    patternPass: 'La contrasena debe incluir mayuscula, minusculas y numeros',
+    fileRequired: 'archivo requerido',
+    notExtentionValid: 'Extension de archivo no valido'
 });
 
 function getDateTime() {
@@ -31,12 +33,7 @@ function getDateTime() {
 }
 
 function saveImages( data: Buffer, destination: string ) {
-    
-  writeFile( destination, data, ( error: NodeJS.ErrnoException ) => {
-    if ( error ) {
-      console.error( error );
-    }
-  });
+  return writeFile( destination, data );
 }
 
 function getFileName( file: Express.Multer.File ): string {

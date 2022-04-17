@@ -24,7 +24,7 @@ export class AppService {
       
       const errors: { [key: string]: string } = {};
       const errorsMap = this.validatorUsers( user );
-
+      
       if ( errorsMap.size > 0 ) {
         errorsMap.forEach(( value, key ) => { 
           errors[key] = value;

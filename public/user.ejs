@@ -1,0 +1,16 @@
+<%- include('partials/header', { title })  %> 
+<%- include('partials/navbar', { userLogged }) %>
+
+<div class="content-fluid d-flex flex-column align-items-center justify-content-center">
+    
+    <!-- alerts -->
+    <% if (errors && errors.success ) { %>
+        <div class="alert alert-success w-50 mt-4" role="alert">
+            <div class="success-text"><%= errors.success %></div>
+        </div>
+    <% } %>
+    
+</div>
+
+
+<%- include('partials/footer') %>

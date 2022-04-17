@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from "typeorm";
 import { Comments, Likes, Users } from ".";
+import { getDateTime } from "src/helpers";
 
 @Entity()
 export class Images {
@@ -12,7 +13,7 @@ export class Images {
     @Column("text")
     description: string;
 
-    @Column("datetime")
+    @Column("datetime", getDateTime())
     createdAt: string;
 
     @Column("datetime")
