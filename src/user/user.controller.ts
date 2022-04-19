@@ -20,26 +20,27 @@ export class UserController {
   async index( @Session() session: SessionData, @Req() request: Request ) {
     
     const [ errors ] = request.flash('errors');
-    let images: ImageType[];
+    let images: ImageType[] = [];
 
     // consultamos las imagenes 
     try {
-      images = await this.imageService.getImagesUser();
-
-      images = images.map(( image ) => {
+      const baseUrl = await app.getUrl();
+      
+      images = ( await this.imageService.getImagesUser() )
+        .map(( image ) => {
         
-        if ( !image.user.image ) {
-          image.user.image = new URL('/image/no-image-icon.png', 'http://localhost:3000').toString()
-        }
-        
-        return image;
-      })
+          if ( !image.user.image ) {
+            image.user.image = new URL('/image/no-image-icon.png', baseUrl ).toString();
+          }
+          
+          return image;
+        });
 
     } catch ( error ) {
-      images = [];
       console.error( error );
     }
 
+    // console.log( images );
 
     // to show variable in ejs return a object with props what you need
     return {

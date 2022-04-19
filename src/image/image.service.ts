@@ -77,12 +77,21 @@ export class ImageService {
   }
 
   getImagesUser(): Promise<Image[]> {
-    return this.imageRepository.find({
-      order: {
-        id: 'DESC'
-      },
-      relations: ['user'] // indica que relaciones deseas cargar debes pasar la prop de la relacion
-    }); 
+    
+    return this.imageRepository.createQueryBuilder('i')
+      .leftJoinAndSelect('i.user', 'u')
+      .select([
+        'i.id', 
+        'i.description', 
+        'i.imagePath', 
+        'u.name',
+        'u.surname',
+        'u.image',
+        'u.nick'
+      ])
+      .orderBy('i.id', 'DESC')
+      .take(5)
+      .getMany();
   } 
   
   validateForm( form: Partial<ImageType> ) {

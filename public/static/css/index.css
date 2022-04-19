@@ -9,16 +9,49 @@ body {
     background: var(--main-bg-color);
 }
 
-.img-avatar {
+.pub_image {
+    margin-bottom: 25px !important;
+}
+
+.pub_image .description {
+    padding: 20px;
+}
+
+.img-container {
+    max-height: 400px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.img-container img {
+    height: auto;
+    width: 100%;
+}
+
+.img-avatar, .pub_image .container-avatar {
     height: 100%;
     width: 100%;
 }
 
-.container-avatar {
+.container-avatar, .pub_image .container-avatar {
     width: 35px;
     height: 35px;
     border-radius: 900px;
     overflow: hidden;
+}
+
+.pub_image .container-avatar {
+    float: left;
+    margin-right: 15px;
+}
+
+.pub_image .data-user {
+    /*font-weight: lighter;*/
+    line-height: 35px;
+}
+
+.nickname {
+    color: gray;
 }
 
 .img-circle {
