@@ -76,7 +76,7 @@ export class ImageService {
     });
   }
 
-  getImagesUser(): Promise<Image[]> {
+  getImagesUser( pagination: { skip: number } ): Promise<[Image[], number]> {
     
     return this.imageRepository.createQueryBuilder('i')
       .leftJoinAndSelect('i.user', 'u')
@@ -90,8 +90,9 @@ export class ImageService {
         'u.nick'
       ])
       .orderBy('i.id', 'DESC')
+      .skip( pagination.skip )
       .take(5)
-      .getMany();
+      .getManyAndCount();
   } 
   
   validateForm( form: Partial<ImageType> ) {

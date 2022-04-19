@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Render, Req, Res, Session, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Render, Req, Res, Session, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { getDateTime } from 'src/helpers';
@@ -17,17 +17,31 @@ export class UserController {
 
   @Get()
   @Render('user')
-  async index( @Session() session: SessionData, @Req() request: Request ) {
+  async index( 
+    @Session() session: SessionData, 
+    @Req() request: Request, 
+    @Query() pagination: { skip: number, page: number } 
+  ) {
     
     const [ errors ] = request.flash('errors');
     let images: ImageType[] = [];
+    let totalImages: number = 0;
+
+    pagination = pagination.page && pagination.skip ? { 
+      skip: Number( pagination.skip),
+      page: Number( pagination.page ) 
+    } : { 
+      skip: 0, 
+      page: 1 
+    };
 
     // consultamos las imagenes 
     try {
       const baseUrl = await app.getUrl();
       
-      images = ( await this.imageService.getImagesUser() )
-        .map(( image ) => {
+      [ images, totalImages ] = await this.imageService.getImagesUser(pagination);
+
+        images.map(( image ) => {
         
           if ( !image.user.image ) {
             image.user.image = new URL('/image/no-image-icon.png', baseUrl ).toString();
@@ -47,7 +61,9 @@ export class UserController {
       title: 'User',
       userLogged: session.user,
       errors: errors ? JSON.parse(errors) : undefined,
-      images
+      images,
+      totalImages,
+      pagination
     };
   }
 

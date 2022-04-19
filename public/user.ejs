@@ -1,11 +1,13 @@
 <%- include('partials/header', { title })  %> 
 <%- include('partials/navbar', { userLogged }) %>
+<script src="/js/pagination.component.js"></script>
 
 <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
   
   <%- include('partials/message', { errors }) %>
   
   <% images.forEach( ( image, index ) => { %>
+
     <div class="card card-login mb-2 pub_image <%= index === 0 ? 'mt-5' : '' %>">
         <div class="card-header">
           <div class="container-avatar">
@@ -27,11 +29,11 @@
           </div>
         </div>
     </div>
+    
   <% }) %>
   
-  <div class="clearfix">
-    pagination
-  </div>
+  <!-- pagination element -->
+  <pagination-component page="<%= pagination.page  %>" registers="<%= totalImages %>"></pagination-component>
 
 </div>
 <%- include('partials/footer') %>

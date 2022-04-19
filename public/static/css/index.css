@@ -28,6 +28,14 @@ body {
     width: 100%;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
+pagination-component {
+    width: 50%;
+}
+
 .img-avatar, .pub_image .container-avatar {
     height: 100%;
     width: 100%;
