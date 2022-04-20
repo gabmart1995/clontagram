@@ -59,10 +59,15 @@ function getFileName( file: Express.Multer.File ): string {
   return name;
 }
 
+function formatTime() {
+  
+}
+
 export {
   regex,
   ERROR_MESSAGES,
   getDateTime,
   saveImages,
-  getFileName
+  getFileName,
+  formatTime
 }

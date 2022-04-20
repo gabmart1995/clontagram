@@ -1,0 +1,39 @@
+<%- include('../partials/header', { title })  %> 
+<%- include('../partials/navbar', { userLogged }) %>
+    
+    <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
+        
+        <% if (image) { %>
+            <div class="card card-detail mb-2 pub_image mt-5">
+                <div class="card-header">
+                  <div class="container-avatar">
+                    <img src="<%= image.user.image %>" alt="avatar" class="img-avatar" />
+                  </div>  
+                  <div class="data-user">
+                    <%= ( image.user.name + ' ' + image.user.surname )  %>
+                    <span class="nickname">| @<%= image.user.nick  %></span>
+                  </div>
+                </div>
+                <div class="card-body p-0">
+                  <div class="img-container d-flex justify-content-center">
+                    <img src="<%= image.imagePath %>"  alt="imagePath" />
+                  </div>
+                  <div class="description pb-0">
+                    <span class="nickname">@<%= image.user.nick %></span>  
+                    <p><%= image.description %></p>
+                  </div>
+                  <div class="likes">
+                    <i class="bi bi-heart-fill"></i>
+                  </div>
+                  <div class="comments">
+                    <a href="" class="btn btn-warning btn-sm m-3 ms-0 mt-0">Comentarios 
+                      (<%= image.comments.length %>)
+                    </a>
+                  </div>
+                </div>
+            </div>
+        <% } %> 
+
+    </div>
+
+<%- include('../partials/footer') %>

@@ -1,3 +1,6 @@
+/* boostrap icons */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+
 :root {
     --main-bg-color: #e0e0e0;
     --font-card-title: 18px;
@@ -13,8 +16,20 @@ body {
     margin-bottom: 25px !important;
 }
 
+.likes {
+    padding: 20px;
+    padding-bottom: 0;
+    padding-top: 0;
+    float: left;
+}
+
+.likes i {
+    font-size: 20px;
+}
+
 .pub_image .description {
     padding: 20px;
+    padding-top: 10px;
 }
 
 .img-container {
@@ -116,6 +131,10 @@ pagination-component {
 .card-login {
     /* margin-top: 1rem; */
     width: 50%;
+}
+
+.card-detail {
+    width: 65%;
 }
 
 .card-login .card-header {

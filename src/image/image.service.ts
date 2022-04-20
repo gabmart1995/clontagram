@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ERROR_MESSAGES, getFileName, regex, saveImages } from 'src/helpers';
 import { app } from 'src/main';
-import { Image, Image as ImageType } from 'src/types';
+import { Image as ImageType } from 'src/types';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { Images, Users, } from '../entities'
@@ -76,10 +76,42 @@ export class ImageService {
     });
   }
 
-  getImagesUser( pagination: { skip: number } ): Promise<[Image[], number]> {
+  getImagesUser( pagination: { skip: number } ): Promise<[Images[], number]> {
     
     return this.imageRepository.createQueryBuilder('i')
       .leftJoinAndSelect('i.user', 'u')
+      .leftJoinAndSelect('i.comments', 'c')
+      .select([
+        'i.id', 
+        'i.description', 
+        'i.imagePath',
+        'DATE_FORMAT(i.createdAt, "%Y-%")', 
+        'u.name',
+        'u.surname',
+        'u.image',
+        'u.nick',
+        'c.id',
+      ])
+      .orderBy('i.id', 'DESC')
+      .skip( pagination.skip )
+      .take(5)
+      .getManyAndCount();
+
+      /*return this.imageRepository.findAndCount({
+        relations: ['user', 'comments', 'likes'],
+        select: ['id', 'description', 'imagePath', 'comments'],
+        order: {
+          id: 'DESC'
+        },
+        skip: pagination.skip,
+        take: 5
+      })*/
+  } 
+
+  getImage( id: number ) {
+    return this.imageRepository.createQueryBuilder('i')
+      .leftJoinAndSelect('i.user', 'u')
+      .leftJoinAndSelect('i.comments', 'c')
       .select([
         'i.id', 
         'i.description', 
@@ -87,13 +119,12 @@ export class ImageService {
         'u.name',
         'u.surname',
         'u.image',
-        'u.nick'
+        'u.nick',
+        'c.id',
       ])
-      .orderBy('i.id', 'DESC')
-      .skip( pagination.skip )
-      .take(5)
-      .getManyAndCount();
-  } 
+      .where('i.id = :id', { id })
+      .getOneOrFail();
+  }
   
   validateForm( form: Partial<ImageType> ) {
     

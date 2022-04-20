@@ -42,7 +42,7 @@ export class UserController {
       [ images, totalImages ] = await this.imageService.getImagesUser(pagination);
 
         images.map(( image ) => {
-        
+          
           if ( !image.user.image ) {
             image.user.image = new URL('/image/no-image-icon.png', baseUrl ).toString();
           }

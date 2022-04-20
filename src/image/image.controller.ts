@@ -1,6 +1,7 @@
-import { Controller, UploadedFile,  Get, Post, Render, Req, Session, UseInterceptors, Body, Res } from '@nestjs/common';
+import { Controller, UploadedFile,  Get, Post, Render, Req, Session, UseInterceptors, Body, Res, Param, ParseIntPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
+import { Images } from 'src/entities';
 import { SessionData, Image as ImageType, Users } from 'src/types';
 import { ImageService } from './image.service';
 
@@ -47,5 +48,31 @@ export class ImageController {
       response.redirect('/image/create');
     }
 
+  }
+
+  @Get('/detail/:id')
+  @Render('image/detail')
+  async getImageDetail( 
+    @Param('id', ParseIntPipe ) id: number, 
+    @Session() session: SessionData 
+  ) {
+    
+    let image: Images;
+
+    try {
+
+      image = await this.imageService.getImage( id );
+      // console.log( image );
+
+    } catch (error) {
+      console.error( error );
+    
+    }
+
+    return {
+      title: 'Image Detail',
+      userLogged: session.user,
+      image
+    };
   }
 }

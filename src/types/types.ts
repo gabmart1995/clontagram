@@ -21,7 +21,15 @@ export type Image = {
     description: string 
     createdAt?: string 
     updatedAt?: string
-    user?: Users
+    user?: Users,
+    comments?: Comments[]
+};
+
+export type Comments = {
+    id: number,
+    content: string,
+    createAt?: string,
+    updateAt?: string
 };
 
 export type Login = {
