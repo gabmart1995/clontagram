@@ -1,6 +1,7 @@
 <%- include('partials/header', { title })  %> 
 <%- include('partials/navbar', { userLogged }) %>
 <script src="/js/pagination.component.js"></script>
+<script src="/js/time.helper.js"></script>
 
 <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
   
@@ -26,7 +27,7 @@
           </div>
           <div class="description pb-0">
             <span class="nickname">@<%= image.user.nick %></span>  
-            <span class="nickname">| <%= image.createdAt %></span> 
+            <span class="nickname date">| <%= image.createdAt %></span> 
             <p><%= image.description %></p>
           </div>
           <div class="likes">
@@ -44,6 +45,5 @@
   
   <!-- pagination element -->
   <pagination-component page="<%= pagination.page  %>" registers="<%= totalImages %>"></pagination-component>
-
 </div>
 <%- include('partials/footer') %>

@@ -85,7 +85,7 @@ export class ImageService {
         'i.id', 
         'i.description', 
         'i.imagePath',
-        'DATE_FORMAT(i.createdAt, "%Y-%")', 
+        'i.createdAt', 
         'u.name',
         'u.surname',
         'u.image',
