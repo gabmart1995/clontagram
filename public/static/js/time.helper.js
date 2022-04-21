@@ -163,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
                   `| Hace ${months} mes` : `| Hace ${months} meses`;   
               }
 
-
             } else {
 
               elementDates[index].innerText = weeks === 1 ? 

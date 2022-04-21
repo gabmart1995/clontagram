@@ -116,6 +116,7 @@ export class ImageService {
         'i.id', 
         'i.description', 
         'i.imagePath', 
+        'i.createdAt',
         'u.name',
         'u.surname',
         'u.image',
