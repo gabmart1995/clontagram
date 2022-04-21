@@ -4,7 +4,7 @@
   <script src="/js/time.helper.js"></script>
   <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
       <% if (image) { %>
-          <div class="card card-detail mb-2 pub_image mt-5">
+          <div class="card card-detail mb-2 pub_image pub-image-detail mt-5">
               <div class="card-header">
                 <div class="container-avatar">
                   <img src="<%= image.user.image %>" alt="avatar" class="img-avatar" />
@@ -26,10 +26,40 @@
                 <div class="likes">
                   <i class="bi bi-heart-fill"></i>
                 </div>
+                <div class="clearfix"></div>
+                
                 <div class="comments">
-                  <a href="" class="btn btn-warning btn-sm m-3 ms-0 mt-0">Comentarios 
+                  
+                  <h2 class="ps-3">Comentarios 
                     (<%= image.comments.length %>)
-                  </a>
+                  </h2>
+                  <hr>
+
+                  <!-- comments form -->
+                  <form action="/comments/save" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <input type="hidden" name="imageId"  value="<%= image.id %>" />
+                    
+                    <%- include('../partials/message', { errors }) %>
+
+                    <textarea class="form-control mt-2 <%= errors && errors.content ? 'error-field' : ''  %>" name="content" id="content"></textarea>
+                    <% if (errors && errors.content) { %>
+                      <div class="error-text"><%= errors.content %></div>
+                    <% } %>
+                    
+                    <input type="submit" value="Enviar" class="btn btn-success btn-sm mt-3" />
+                  </form>
+
+                  <div class="clearfix mt-2"></div>
+                  <% image.comments.forEach( comment => { %>
+                    <div class="comment">
+                      <span class="nickname">@<%= image.user.nick %></span>
+                      <span class="nickname date">| <%= comment.createdAt %></span>  
+                      <p><%= comment.content %></p>
+                    </div>
+                  <% }) %>
+
+
                 </div>
               </div>
           </div>

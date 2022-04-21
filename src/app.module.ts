@@ -6,6 +6,7 @@ import { Users } from './entities';
 import { NoLoggedMiddleware } from './middleware';
 import { UserModule } from './user/user.module';
 import { ImageModule } from './image/image.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [ 
@@ -13,6 +14,7 @@ import { ImageModule } from './image/image.module';
     TypeOrmModule.forFeature([ Users ]),
     UserModule,
     ImageModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

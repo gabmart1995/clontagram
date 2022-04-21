@@ -130,11 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let seconds = DATE_DIFFERENCES.inSeconds( date );
     
-    if ( seconds > 60 ) {
+    if ( seconds > 59 ) {
 
       let minutes = DATE_DIFFERENCES.inMinutes( date );
 
-      if ( minutes > 60 ) {
+      if ( minutes > 59 ) {
 
         let hours = DATE_DIFFERENCES.inHours( date );
 

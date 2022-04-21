@@ -122,6 +122,8 @@ export class ImageService {
         'u.image',
         'u.nick',
         'c.id',
+        'c.content',
+        'c.createdAt',
       ])
       .where('i.id = :id', { id })
       .getOneOrFail();

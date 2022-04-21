@@ -145,3 +145,8 @@ pagination-component {
 .card-login .card-body {
     padding: 1rem 5rem;
 }
+
+
+.pub-image-detail .comments {
+    padding: 20px;
+}

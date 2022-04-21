@@ -17,7 +17,8 @@ const ERROR_MESSAGES = Object.freeze({
     notMatch: 'La contraseña no coincide',
     patternPass: 'La contrasena debe incluir mayuscula, minusculas y numeros',
     fileRequired: 'archivo requerido',
-    notExtentionValid: 'Extension de archivo no valido'
+    notExtentionValid: 'Extension de archivo no valido',
+    onlyNumbers: 'Solo numeros'
 });
 
 const DATE_DIFFERENCES = Object.freeze({

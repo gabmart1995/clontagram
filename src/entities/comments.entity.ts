@@ -1,3 +1,4 @@
+import { getDateTime } from "src/helpers";
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import { Users, Images } from ".";
 
@@ -9,7 +10,7 @@ export class Comments {
     @Column("text")
     content: string;
 
-    @Column("datetime")
+    @Column("datetime", getDateTime())
     createdAt: string;
 
     @Column("datetime")

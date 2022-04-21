@@ -54,15 +54,17 @@ export class ImageController {
   @Render('image/detail')
   async getImageDetail( 
     @Param('id', ParseIntPipe ) id: number, 
-    @Session() session: SessionData 
+    @Session() session: SessionData,
+    @Req() request: Request 
   ) {
     
+    const [ errors ] = request.flash('errors');
     let image: Images;
 
     try {
 
       image = await this.imageService.getImage( id );
-      // console.log( image );
+      console.log( image );
 
     } catch (error) {
       console.error( error );
@@ -72,7 +74,9 @@ export class ImageController {
     return {
       title: 'Image Detail',
       userLogged: session.user,
-      image
+      image,
+      csrfToken: request.csrfToken(),
+      errors: errors ? JSON.parse( errors ) : undefined
     };
   }
 }
