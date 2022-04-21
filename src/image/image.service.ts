@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { join } from 'path';
+import { CommentsService } from 'src/comments/comments.service';
 import { ERROR_MESSAGES, getFileName, regex, saveImages } from 'src/helpers';
 import { app } from 'src/main';
 import { Image as ImageType } from 'src/types';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
-import { Images, Users, } from '../entities'
+import { Images } from '../entities'
 
 @Injectable()
 export class ImageService {
@@ -16,7 +17,8 @@ export class ImageService {
   constructor( 
     @InjectRepository(Images)
     private readonly imageRepository: Repository<Images>,
-    private readonly userService: UserService 
+    private readonly userService: UserService,
+    private readonly commentService: CommentsService 
   ) {}
 
   save( idUser: number,  form: Partial<ImageType>, file: Express.Multer.File ): Promise<{ success: string }> {
@@ -96,37 +98,44 @@ export class ImageService {
       .skip( pagination.skip )
       .take(5)
       .getManyAndCount();
-
-      /*return this.imageRepository.findAndCount({
-        relations: ['user', 'comments', 'likes'],
-        select: ['id', 'description', 'imagePath', 'comments'],
-        order: {
-          id: 'DESC'
-        },
-        skip: pagination.skip,
-        take: 5
-      })*/
   } 
 
   getImage( id: number ) {
-    return this.imageRepository.createQueryBuilder('i')
-      .leftJoinAndSelect('i.user', 'u')
-      .leftJoinAndSelect('i.comments', 'c')
-      .select([
-        'i.id', 
-        'i.description', 
-        'i.imagePath', 
-        'i.createdAt',
-        'u.name',
-        'u.surname',
-        'u.image',
-        'u.nick',
-        'c.id',
-        'c.content',
-        'c.createdAt',
-      ])
-      .where('i.id = :id', { id })
-      .getOneOrFail();
+
+    return new Promise( async ( resolve, reject ) => {
+
+      try {
+
+        const image = await this.imageRepository.createQueryBuilder('i')
+          .leftJoinAndSelect('i.user', 'u')
+          .leftJoinAndSelect('i.comments', 'c')
+          .select([
+            'i.id', 
+            'i.description', 
+            'i.imagePath', 
+            'i.createdAt',
+            'u.name',
+            'u.surname',
+            'u.image',
+            'u.nick',
+            'c.id',
+            'c.content',
+            'c.createdAt',
+          ])
+          .where('i.id = :id', { id })
+          .getOneOrFail();
+        
+        image.comments = await this.commentService.getComments();
+
+        // console.log( image.comments );
+
+        resolve( image )
+
+      } catch ( error ) {
+        
+        reject( error );
+      }
+    });
   }
   
   validateForm( form: Partial<ImageType> ) {

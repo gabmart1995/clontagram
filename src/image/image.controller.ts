@@ -59,12 +59,12 @@ export class ImageController {
   ) {
     
     const [ errors ] = request.flash('errors');
-    let image: Images;
+    let image: Partial<ImageType>;
 
     try {
 
       image = await this.imageService.getImage( id );
-      console.log( image );
+      // console.log( image );
 
     } catch (error) {
       console.error( error );

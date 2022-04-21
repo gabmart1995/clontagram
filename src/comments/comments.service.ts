@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Comments, Images, Users } from 'src/entities';
+import { Comments, Users } from 'src/entities';
 import { ERROR_MESSAGES, regex } from 'src/helpers';
-import { ImageService } from 'src/image/image.service';
 import { Repository } from 'typeorm';
 
 type CommentType = { content: string, imageId: string, userId: number, user: Users };
-
 
 @Injectable()
 export class CommentsService {
@@ -62,7 +60,43 @@ export class CommentsService {
     });
   }
 
-  validateComment( comment: CommentType) {
+  getComments() {
+    return this.commentRepository.createQueryBuilder('c')
+      .innerJoinAndSelect('c.user', 'u')
+      .innerJoinAndSelect('c.image', 'i')
+      .select([
+        'c.id',
+        'c.content',
+        'c.createdAt',
+        'u.nick',
+        'u.id',
+        'i.id'
+      ])
+      .orderBy('c.id', 'DESC')
+      .getMany()
+  }
+
+  getComment( id: number ) {
+    return this.commentRepository.createQueryBuilder('c')
+      .innerJoinAndSelect('c.user', 'u')
+      .innerJoinAndSelect('c.image', 'i')
+      .select([
+        'c.id',
+        'c.content',
+        'c.createdAt',
+        'u.nick',
+        'u.id',
+        'i.id'
+      ])
+      .where('c.id = :id', { id })
+      .getOneOrFail()
+  }
+
+  deleteComment( comment: Comments ) {
+    return this.commentRepository.remove( comment );
+  }
+
+  validateComment( comment: CommentType ) {
 
     const errors = new Map<string, string>();
 

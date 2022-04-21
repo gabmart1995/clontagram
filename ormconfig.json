@@ -7,6 +7,6 @@
     "password": "",
     "database": "clontagram",
     "entities": ["dist/entities/*.entity{.ts,.js}"],
-    "synchronize": true
+    "synchronize": false
   }
   

@@ -50,15 +50,22 @@
                     <input type="submit" value="Enviar" class="btn btn-success btn-sm mt-3" />
                   </form>
 
-                  <div class="clearfix mt-2"></div>
+                  <hr class="mt-2" />
+
+                  <!-- comments -->
                   <% image.comments.forEach( comment => { %>
+
                     <div class="comment">
-                      <span class="nickname">@<%= image.user.nick %></span>
+                      <span class="nickname">@<%= comment.user.nick %></span>
                       <span class="nickname date">| <%= comment.createdAt %></span>  
                       <p><%= comment.content %></p>
-                    </div>
-                  <% }) %>
+                      <% if (comment && ( comment.user.id === userLogged.id )) { %>
+                        <a href="/comments/delete/<%= comment.id %>" class="btn btn-sm btn-danger">Eliminar</a>
+                      <% } %>
 
+                    </div>
+                  
+                  <% }) %>
 
                 </div>
               </div>
