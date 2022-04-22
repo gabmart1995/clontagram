@@ -60,7 +60,7 @@ export class CommentsService {
     });
   }
 
-  getComments() {
+  getCommentsByImage( imageId: number ) {
     return this.commentRepository.createQueryBuilder('c')
       .innerJoinAndSelect('c.user', 'u')
       .innerJoinAndSelect('c.image', 'i')
@@ -72,6 +72,7 @@ export class CommentsService {
         'u.id',
         'i.id'
       ])
+      .where('i.id = :id', { id: imageId })
       .orderBy('c.id', 'DESC')
       .getMany()
   }

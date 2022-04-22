@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { getDateTime } from 'src/helpers';
 import { ImageService } from 'src/image/image.service';
+import { LikeService } from 'src/like/like.service';
 import { app } from 'src/main';
 import { Image as ImageType, SessionData, Users as UsersType } from 'src/types';
 import { UserService } from './user.service';
@@ -12,7 +13,8 @@ export class UserController {
   
   constructor( 
     private userService: UserService, 
-    private imageService: ImageService  
+    private imageService: ImageService,
+    private likeService: LikeService  
   ) {}
 
   @Get()
@@ -41,16 +43,30 @@ export class UserController {
       
       [ images, totalImages ] = await this.imageService.getImagesUser(pagination);
 
-      images.map(( image ) => {
+      images.map( async ( image ) => {
         
+        // image
         if ( !image.user.image ) {
           image.user.image = new URL('/image/no-image-icon.png', baseUrl ).toString();
         }
-        
+
+        image.likes = await this.likeService.getLikes( image.id );
+
+        if ( image.likes.length > 0 ) {
+          
+          image.likes.map( like => {
+            
+            like.like = session.user.id === like.user.id;
+            
+            return like;
+          })
+        }
+
+        console.log( image.likes )
+
         return image;
       });
 
-      // console.log( images );
 
     } catch ( error ) {
       console.error( error );

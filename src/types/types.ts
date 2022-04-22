@@ -22,7 +22,8 @@ export type Image = {
     createdAt?: string 
     updatedAt?: string
     user?: Users,
-    comments?: Comments[]
+    comments?: Comments[],
+    likes?: Like[]
 };
 
 export type Comments = {
@@ -30,6 +31,15 @@ export type Comments = {
     content: string,
     createAt?: string,
     updateAt?: string
+};
+
+export type Like = {
+    id: number,
+    createAt?: string,
+    updatedAt?: string,
+    user?: Users,
+    image?: Image,
+    like?: boolean
 };
 
 export type Login = {

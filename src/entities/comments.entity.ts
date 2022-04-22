@@ -10,7 +10,7 @@ export class Comments {
     @Column("text")
     content: string;
 
-    @Column("datetime", getDateTime())
+    @Column("datetime")
     createdAt: string;
 
     @Column("datetime")

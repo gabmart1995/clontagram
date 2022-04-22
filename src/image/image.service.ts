@@ -83,6 +83,7 @@ export class ImageService {
     return this.imageRepository.createQueryBuilder('i')
       .leftJoinAndSelect('i.user', 'u')
       .leftJoinAndSelect('i.comments', 'c')
+      .leftJoinAndSelect('i.likes', 'l')
       .select([
         'i.id', 
         'i.description', 
@@ -93,6 +94,8 @@ export class ImageService {
         'u.image',
         'u.nick',
         'c.id',
+        'l.id',
+        'l.createdAt',
       ])
       .orderBy('i.id', 'DESC')
       .skip( pagination.skip )
@@ -125,7 +128,8 @@ export class ImageService {
           .where('i.id = :id', { id })
           .getOneOrFail();
         
-        image.comments = await this.commentService.getComments();
+        // get comments for image
+        image.comments = await this.commentService.getCommentsByImage( image.id );
 
         // console.log( image.comments );
 

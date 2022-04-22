@@ -32,7 +32,7 @@ export class Users {
     @Column("varchar", { length: 255 })
     image: string;
 
-    @Column("datetime", getDateTime())
+    @Column("datetime")
     createdAt: string;
 
     @Column("datetime")

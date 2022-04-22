@@ -64,7 +64,7 @@ export class ImageController {
     try {
 
       image = await this.imageService.getImage( id );
-      // console.log( image );
+      console.log( image );
 
     } catch (error) {
       console.error( error );

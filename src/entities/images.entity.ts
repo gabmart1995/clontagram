@@ -13,7 +13,7 @@ export class Images {
     @Column("text")
     description: string;
 
-    @Column("datetime", getDateTime())
+    @Column("datetime")
     createdAt: string;
 
     @Column("datetime")

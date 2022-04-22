@@ -150,3 +150,7 @@ pagination-component {
 .pub-image-detail .comments {
     padding: 20px;
 }
+
+.lighter {
+    font-weight: lighter;
+}
