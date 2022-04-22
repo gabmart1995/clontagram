@@ -22,7 +22,7 @@ export class LikeController {
   
       try {
 
-        const like = await this.likeService.getLike( imageId );
+        const like = await this.likeService.getLike( imageId, id );
 
         if ( !like ) {
           await this.likeService.sendLike( id, imageId );
@@ -60,13 +60,19 @@ export class LikeController {
 
     @Get('/dislike/:image_id')
     async disLike(
+      @Session() session: SessionData,
       @Param('image_id', ParseIntPipe) imageId: number,
       @Res() response: Response
     ) {
       
+
+      const { id } = session.user;
+
       try {
 
-        const like = await this.likeService.getLike( imageId );
+        const like = await this.likeService.getLike( imageId, id );
+
+        console.log( like );
 
         if ( like ) {
 

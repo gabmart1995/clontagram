@@ -31,21 +31,20 @@
             <p><%= image.description %></p>
           </div>
           <div class="likes">
-            <% if ( image.likes.length > 0 || image.likes.some( like => like.like ) ) { %>
-              <i class="bi bi-heart-fill" style="color: red;"></i> <!-- like -->
+            <i 
+              class="bi bi-heart-fill heart" 
+              aria-image-id="<%= image.id %>" 
+              aria-like="<%= image.likes.some( like => like.user.id === userLogged.id ) %>"></i>
             
-            <% } else { %>
+            <!--<%#= image.likes.some( like => !like.like )  %> 
+            
+            <%# if ( image.likes.some( like => like.like ) ) { %>
+              <i class="bi bi-heart-fill" style="color: red;"></i> 
+            
+            <%# } else { %>
               <i class="bi bi-heart-fill"></i>
             
-            <% } %> 
-            
-            <!-- <i 
-              class="bi bi-heart-fill heart" 
-              aria-image-id="<%#= image.id %>" 
-              aria-like="<%#= 
-                image.likes.some( like => like.user.id === userLogged.id ) && image.likes.length > 0 
-              %>"
-            ></i>-->
+            <%# } %>-->
             <span class="lighter likesCount"><%= image.likes.length  %></span><!-- numero de likes --> 
           </div>
           <div class="comments">

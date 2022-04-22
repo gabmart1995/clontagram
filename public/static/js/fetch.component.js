@@ -23,12 +23,14 @@
         const response = await fetch(url);
         const json = await response.json();
         
+        console.log( json );
+        
         // set color heart and counter
         let value = Number( likeCount.innerText );
         
-        value = json.like ? ++value : --value;
+        value = !like ? ++value : --value;
         
-        like = json.like && value > 0;
+        // like = json.like && value > 0;
         
         likeIcon.style.color = like ? 'red' : 'black';
         likeCount.innerText = value;
