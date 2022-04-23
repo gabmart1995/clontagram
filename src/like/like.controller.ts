@@ -1,5 +1,6 @@
 import { Controller, Get, Param, ParseIntPipe, Res,  Session } from '@nestjs/common';
 import { Response } from 'express';
+import { Likes } from 'src/entities';
 import { SessionData } from 'src/types';
 import { LikeService } from './like.service';
 
@@ -19,43 +20,42 @@ export class LikeController {
     ) {
       
       const { id } = session.user;
-  
+      let like: Likes;
+
       try {
 
-        const like = await this.likeService.getLike( imageId, id );
+        like = await this.likeService.getLike( imageId, id );
+
+        // console.log( like );
 
         if ( !like ) {
-          await this.likeService.sendLike( id, imageId );
+
+          // devuelve el like guardado
+          like = await this.likeService.sendLike( id, imageId );
           
-          response
-            .status(201)
-            .json({
-              like: true,
-              message: 'like actualizado'
-            });
+          response.status(201).json({
+            like,
+            message: 'like actualizado'
+          });
 
             return;
         }
         
       } catch (error) {
+        
         console.error( error );
 
-        response
-          .status(500)
-          .json({
-            error: error.message,
-            like: false
-          });
+        response.status(500).json({
+          error: error.message,
+          like
+        });
 
         return;
       }
 
-      response
-        .status(400)
-        .json({
-          like: false,
-          message: 'el like ya existe'
-        });
+      response.status(400).json({
+        message: 'el like ya existe'
+      });
     }
 
     @Get('/dislike/:image_id')
@@ -65,25 +65,23 @@ export class LikeController {
       @Res() response: Response
     ) {
       
-
+      let like: Likes;
       const { id } = session.user;
 
       try {
 
-        const like = await this.likeService.getLike( imageId, id );
+        like = await this.likeService.getLike( imageId, id );
 
-        console.log( like );
-
+        // console.log( like );
+        
         if ( like ) {
 
           await this.likeService.sendDislike( like.id );
           
-          response
-            .status(200)
-            .json({
-              like: false,
-              message: 'like actualizado'
-            })
+          response.status(200).json({
+            like,
+            message: 'like actualizado'
+          });
           
           return;
         }
@@ -92,21 +90,16 @@ export class LikeController {
         
         console.error( error );
 
-        response
-          .status(500)
-          .json({
-            error: error.message,
-            like: true
-          });
+        response.status(500).json({
+          error: error.message
+        });
 
         return;
       }
 
-      response
-        .status(400)
-        .json({
-          like: true,
-          message: 'el like no existe'
-        });
+      response.status(400).json({
+        like,
+        message: 'el like no existe'
+      });
     }
 }

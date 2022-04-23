@@ -1,43 +1,75 @@
-(function () {
-  const likesContainer = Array.from( document.querySelectorAll('.likes'));
+document.addEventListener('DOMContentLoaded', () => {
   
-  likesContainer.forEach(( element ) => {
+  const like = () => {
+    const buttonsLike = document.querySelectorAll('.btn-like');
     
-    const likeIcon = element.querySelector('.heart');
-    const likeCount = element.querySelector('.likesCount');
-
-    const idImage = Number(likeIcon.getAttribute('aria-image-id'));
-    let like = likeIcon.getAttribute('aria-like') === 'true';
-    
-    // set color heart
-    likeIcon.style.color = like ? 'red' : 'black';
-
-    // add click event to fetch likes
-    likeIcon.addEventListener('click', async ( event ) => {  
+    const handleClick = ( $event ) => {
       
-      try {
+      const element = $event.target;      
+      const imageId = element.getAttribute('data-id');
+      
+      element.classList.replace('btn-like', 'btn-dislike');
+      
+      console.log({ state: 'dislike', imageId });
+      
+      // remueve el listener anclado para evitar acumular eventos
+      // element.removeEventListener('click', handleClick );
 
-        let url = `http://${location.host}/`;
-        url += !like ? `like/${idImage}` : `like/dislike/${idImage}`;
-        
-        const response = await fetch(url);
-        const json = await response.json();
-        
-        console.log( json );
-        
-        // set color heart and counter
-        let value = Number( likeCount.innerText );
-        
-        value = !like ? ++value : --value;
-        
-        // like = json.like && value > 0;
-        
-        likeIcon.style.color = like ? 'red' : 'black';
-        likeCount.innerText = value;
+      // vuelve a actualizar los elementos dom por cada cambio de estado
+      dislike();
+    };
 
-      } catch (error) {
-        console.error( error );
-      }
+    // boton like
+    buttonsLike.forEach(( element ) => {
+      
+      // se deben volver a clonar los elementos y reemplazarlos en el DOM  
+      // en cada llamada para desvincular los eventos
+      // cloneNode: crea una copia del elemento sin los event listeners vinculados al elemento
+
+      const cloneElement = element.cloneNode( false );
+      element.parentNode.replaceChild( cloneElement, element );
+
+      cloneElement.addEventListener('click', handleClick );
     });
-  });
-})();
+  }
+  
+  const dislike = () => {
+
+    const buttonsDislike = document.querySelectorAll('.btn-dislike');  
+    const handleClick = ( $event ) => {
+
+      const element = $event.target;
+      const imageId = element.getAttribute('data-id');
+
+      element.classList.replace('btn-dislike', 'btn-like');
+      
+      console.log({ state: 'like', imageId });
+      
+      // remueve el listener anclado para evitar acumular eventos
+      // element.removeEventListener('click', handleClick );
+      
+      // vuelve a actualizar los elementos dom por cada cambio de estado
+      like();
+    };
+
+    // boton dislike
+    buttonsDislike.forEach(( element ) => {
+
+      // se deben volver a clonar los elementos y reemplazarlos en el DOM  
+      // en cada llamada para desvincular los eventos
+      // cloneNode: crea una copia del elemento sin los event listeners vinculados al elemento
+
+      const cloneElement = element.cloneNode( false );
+      element.parentNode.replaceChild( cloneElement, element );
+
+      cloneElement.addEventListener('click', handleClick );
+    });
+  }
+
+  const fetchData = ( request ) => {
+    fetch( request )
+  }
+
+  like();
+  dislike();
+});

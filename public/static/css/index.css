@@ -21,10 +21,13 @@ body {
     padding-bottom: 0;
     padding-top: 0;
     float: left;
+    display: inline-flex;
+    align-items: center;
 }
 
 .likes i {
     font-size: 20px;
+    margin-right: 7px;
 }
 
 .pub_image .description {
@@ -153,4 +156,17 @@ pagination-component {
 
 .lighter {
     font-weight: lighter;
+}
+
+.number-likes {
+    color: gray;
+    font-size: 11px;
+}
+
+.btn-like {
+    color: red;
+}
+
+.btn-dislike {
+    color: black;
 }

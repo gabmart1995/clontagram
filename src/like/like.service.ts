@@ -27,8 +27,8 @@ export class LikeService {
     return this.likeRepository.createQueryBuilder('l')
       .leftJoinAndSelect('l.user', 'u')
       .leftJoinAndSelect('l.image', 'i')
-      .where('i.id = :id', { id: imageId })
-      .andWhere('u.id = :id', { id: userId })
+      .where('i.id = :imageId', { imageId })
+      .andWhere('u.id = :userId', { userId })
       .getOne();
   }
 

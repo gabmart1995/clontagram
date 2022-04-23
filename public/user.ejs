@@ -1,7 +1,10 @@
 <%- include('partials/header', { title })  %> 
 <%- include('partials/navbar', { userLogged }) %>
+
+<!-- JS components and libraries -->
 <script src="/js/pagination.component.js"></script>
 <script src="/js/time.helper.js"></script>
+<script src="/js/fetch.component.js"></script>
 
 <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
   
@@ -31,21 +34,20 @@
             <p><%= image.description %></p>
           </div>
           <div class="likes">
-            <i 
-              class="bi bi-heart-fill heart" 
-              aria-image-id="<%= image.id %>" 
-              aria-like="<%= image.likes.some( like => like.user.id === userLogged.id ) %>"></i>
             
-            <!--<%#= image.likes.some( like => !like.like )  %> 
+            <!-- comprobar si el usuario le dio like al imagen -->
+            <% if ( image.likes.some( like => like.user.id === userLogged.id ) ) { %>
+              <i class="bi bi-heart-fill btn-like pointer" data-id="<%= image.id %>"></i> <!-- like marcado -->
             
-            <%# if ( image.likes.some( like => like.like ) ) { %>
-              <i class="bi bi-heart-fill" style="color: red;"></i> 
+            <% } else { %>
+              <i class="bi bi-heart-fill btn-dislike pointer" data-id="<%= image.id %>"></i>
             
-            <%# } else { %>
-              <i class="bi bi-heart-fill"></i>
+            <% } %>
             
-            <%# } %>-->
-            <span class="lighter likesCount"><%= image.likes.length  %></span><!-- numero de likes --> 
+            <!-- numero de likes -->
+            <span class="lighter likesCount number-likes">
+              <%= image.likes.length  %>
+            </span> 
           </div>
           <div class="comments">
             <a href="" class="btn btn-warning btn-sm m-3 ms-0 mt-0">Comentarios 
@@ -60,5 +62,4 @@
   <!-- pagination element -->
   <pagination-component page="<%= pagination.page  %>" registers="<%= totalImages %>"></pagination-component>
 </div>
-<script src="/js/fetch.component.js"></script>
 <%- include('partials/footer') %>

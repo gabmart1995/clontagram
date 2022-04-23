@@ -58,7 +58,7 @@ export class UserController {
       console.error( error );
     }
 
-    images.forEach(( image ) => console.log( image ));
+    // images.forEach(( image ) => console.log( image ));
 
   
     // to show variable in ejs return a object with props what you need
