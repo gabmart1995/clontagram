@@ -1,22 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
   
+  const url = 'http://localhost:3000';
+
   const like = () => {
-    const buttonsLike = document.querySelectorAll('.btn-like');
     
-    const handleClick = ( $event ) => {
+    const buttonsLike = document.querySelectorAll('.btn-like');
+
+    const handleClick = async ( $event ) => {
       
       const element = $event.target;      
+      const numberLikesSpan = element.parentNode.querySelector('.number-likes');
       const imageId = element.getAttribute('data-id');
+     
+      // console.log({ numberLikes });
       
-      element.classList.replace('btn-like', 'btn-dislike');
-      
-      console.log({ state: 'dislike', imageId });
-      
-      // remueve el listener anclado para evitar acumular eventos
-      // element.removeEventListener('click', handleClick );
+      try {
+        
+        const response = await fetch(`${url}/like/dislike/${imageId}`);
+        const json = await response.json();
+        
+        console.log( json );
+        
+        element.classList.replace('btn-like', 'btn-dislike');
 
-      // vuelve a actualizar los elementos dom por cada cambio de estado
-      dislike();
+        // remueve el listener anclado para evitar acumular eventos
+        // element.removeEventListener('click', handleClick );
+        let value = Number(numberLikesSpan.innerText);
+        value--;
+
+        numberLikesSpan.innerText = value;
+
+        // vuelve a actualizar los elementos dom por cada cambio de estado
+        dislike();
+
+      } catch (error) {
+        console.error( error );
+
+      }
+      
     };
 
     // boton like
@@ -31,25 +52,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
       cloneElement.addEventListener('click', handleClick );
     });
-  }
+   }
   
   const dislike = () => {
 
     const buttonsDislike = document.querySelectorAll('.btn-dislike');  
-    const handleClick = ( $event ) => {
+    const handleClick = async ( $event ) => {
 
       const element = $event.target;
+      const numberLikesSpan = element.parentNode.querySelector('.number-likes');
       const imageId = element.getAttribute('data-id');
 
-      element.classList.replace('btn-dislike', 'btn-like');
+      // console.log({ state: 'like', imageId });
       
-      console.log({ state: 'like', imageId });
+      try {
+
+        const response = await fetch(`${url}/like/${imageId}`);
+        const json = await response.json();
+
+        console.log( json );
+
+        element.classList.replace('btn-dislike', 'btn-like');
+        
+        let value = Number(numberLikesSpan.innerText);
+        value++;
+
+        console.log( value );
+
+        numberLikesSpan.innerText = value;
+        // remueve el listener anclado para evitar acumular eventos
+        // element.removeEventListener('click', handleClick );
       
-      // remueve el listener anclado para evitar acumular eventos
-      // element.removeEventListener('click', handleClick );
+        // vuelve a actualizar los elementos dom por cada cambio de estado
+        like();
+
+      } catch (error) {
+        console.error( error );  
       
-      // vuelve a actualizar los elementos dom por cada cambio de estado
-      like();
+      }
     };
 
     // boton dislike
@@ -64,10 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       cloneElement.addEventListener('click', handleClick );
     });
-  }
-
-  const fetchData = ( request ) => {
-    fetch( request )
   }
 
   like();
