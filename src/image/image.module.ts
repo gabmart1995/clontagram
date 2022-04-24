@@ -4,23 +4,16 @@ import { ImageController } from './image.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { ImageService } from './image.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Comments, Images, Likes, Users } from 'src/entities';
-import { UserService } from 'src/user/user.service';
-import { CommentsService } from 'src/comments/comments.service';
-import { LikeService } from 'src/like/like.service';
+import { Images } from 'src/entities';
+
 
 @Module({
   controllers: [ImageController],
   imports: [ 
-    TypeOrmModule.forFeature([ Images, Comments, Likes, Users ]),
+    TypeOrmModule.forFeature([ Images ]),
     MulterModule.register(),
   ],
-  providers: [
-    ImageService,
-    UserService,
-    LikeService,
-    CommentsService
-  ],
+  providers: [ImageService],
 })
 export class ImageModule implements NestModule {
   

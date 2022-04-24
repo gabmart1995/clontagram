@@ -14,7 +14,6 @@ export class UserController {
   constructor( 
     private userService: UserService, 
     private imageService: ImageService,
-    private likeService: LikeService  
   ) {}
 
   @Get()

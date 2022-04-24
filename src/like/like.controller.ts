@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Render, Res,  Session } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query, Render, Res,  Session } from '@nestjs/common';
 import { Response } from 'express';
 import { Likes } from 'src/entities';
 import { Like, SessionData } from 'src/types';
@@ -15,25 +15,37 @@ export class LikeController {
   @Get()
   @Render('likes/index')
   async index(
-    @Session() session: SessionData
+    @Session() session: SessionData,
+    @Query() pagination: { skip: number, page: number }
   ) {
     
     let likes: Like[];
+    let totalLikes: number = 0;
+
+    if ( pagination.page && pagination.skip ) {
+      pagination = { skip: Number( pagination.skip ), page: Number( pagination.page ) };
+    
+    } else {
+      pagination = { skip: 0, page: 1 };
+    
+    }
 
     try {
-      likes = await this.likeService.getLikesPaginate( session.user.id as number );
+      [ likes, totalLikes ] = await this.likeService.getLikesPaginate( session.user.id as number, pagination.skip );
 
     } catch ( error ) {
       console.error( error );
 
     }
 
-    likes.forEach( (like) => console.log( like.image ));
+    // likes.forEach( (like) => console.log( like.image.likes ));
     
     return {
-      title: 'Likes list',
+      title: 'likes',
       userLogged: session.user,
-      likes
+      likes,
+      pagination,
+      totalLikes
     };
   }
 

@@ -7,8 +7,19 @@
 <script src="/js/like.helper.js"></script>
 
 <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
-    <% likes.forEach( ( like, index ) => { %>
-        <% include('../partials/image', { image: like.image, index, userLogged }) %>      
+    
+    <h2 class="mt-4 w-50">Mis imagenes favoritas</h2>
+    <hr class="w-50 separator" />
+    
+    <% likes.forEach( ( like, index ) => { %> 
+        <%- include('../partials/image', { image: like.image, index, userLogged }); %>      
     <% }) %>
+
+    <!-- pagination element -->
+  <pagination-component 
+    page="<%= pagination.page  %>" 
+    registers="<%= totalLikes %>"
+    url="http://localhost:3000/like"
+    ></pagination-component>
 </div>
 <%- include('../partials/footer') %>

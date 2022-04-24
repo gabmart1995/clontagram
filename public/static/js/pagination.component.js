@@ -97,17 +97,19 @@ customElements.define('pagination-component', class PaginationComponent extends 
     
     let skip = ( +page - 1 ) * pagination;
     
+    const url = this.getAttribute('url');    
+    
     // console.log({ indexPagination });
 
     // redirecciona con js pasando el query al backend
     if ( page > 1 ) {
 
-        location = `http://${location.host}/user?page=${page}&skip=${skip}`;
+        location = `${url}?page=${page}&skip=${skip}`;
 
         return;
     }
     
-    location = `http://${location.host}/user`;
+    location = url;
   }
 
   /** callback que se dispara al conectar el elemento al DOM */

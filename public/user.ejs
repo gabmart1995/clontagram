@@ -16,6 +16,10 @@
   <% }) %>
   
   <!-- pagination element -->
-  <pagination-component page="<%= pagination.page  %>" registers="<%= totalImages %>"></pagination-component>
+  <pagination-component 
+    page="<%= pagination.page  %>" 
+    registers="<%= totalImages %>"
+    url="http://localhost:3000/user"
+  ></pagination-component>
 </div>
 <%- include('partials/footer') %>

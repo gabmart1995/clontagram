@@ -17,12 +17,7 @@ export class ImageService {
   
   constructor( 
     @InjectRepository(Images)
-    private readonly imageRepository: Repository<Images>,
-    
-    @Inject(forwardRef( () => UserService ))
-    private readonly userService: UserService,
-    private readonly commentService: CommentsService,
-    private readonly likeService: LikeService 
+    private readonly imageRepository: Repository<Images>
   ) {}
 
   save( idUser: number,  form: Partial<ImageType>, file: Express.Multer.File ): Promise<{ success: string }> {
@@ -60,11 +55,12 @@ export class ImageService {
       form.imagePath = url.toString();
 
       try {
-        
-        const user = await this.userService.getUser(idUser);
-        form.user = user;
-
-        await this.imageRepository.save( this.imageRepository.create( form ) );
+      
+        await this.imageRepository.save( this.imageRepository.create({ 
+          ...form, 
+          user: { id: idUser } 
+          }) 
+        );
         await saveImages( file.buffer, join( this.storagePath, fileName ) );
 
         resolve({ success: 'Imagen subida con exito' });
@@ -88,27 +84,13 @@ export class ImageService {
 
       try {
         
-        const [ images, imagesCount ] = await this.imageRepository.createQueryBuilder('i')
-        .leftJoinAndSelect('i.user', 'u')
-        .leftJoinAndSelect('i.comments', 'c')
-        .leftJoinAndSelect('i.likes', 'l')
-        .select([
-          'i.id', 
-          'i.description', 
-          'i.imagePath',
-          'i.createdAt', 
-          'u.name',
-          'u.surname',
-          'u.image',
-          'u.nick',
-          'c.id',
-          'l.id',
-          'l.createdAt',
-        ])
-        .orderBy('i.id', 'DESC')
-        .skip( pagination.skip )
-        .take(5)
-        .getManyAndCount();
+        let [ images, imagesCount ] = await this.imageRepository.findAndCount({
+          order: { id: 'DESC' },
+          skip: pagination.skip,
+          take: 5,
+          relations: ['user', 'likes', 'likes.user', 'comments']
+        }); 
+        
 
         // iterable asincrono para mapear las imagenes
         for await ( const image of images ) {
@@ -116,11 +98,11 @@ export class ImageService {
           // image
           if ( !image.user.image ) {
             image.user.image = new URL('/image/no-image-icon.png', await app.getUrl() ).toString();
-          }
-          
-          image.likes = await this.likeService.getLikes( image.id ); 
+          } 
         }
 
+        // console.log( images );
+        
         resolve([ images, imagesCount ]);
 
       } catch (error) {
@@ -128,28 +110,6 @@ export class ImageService {
       
       }
     });  
-
-    return this.imageRepository.createQueryBuilder('i')
-      .leftJoinAndSelect('i.user', 'u')
-      .leftJoinAndSelect('i.comments', 'c')
-      .leftJoinAndSelect('i.likes', 'l')
-      .select([
-        'i.id', 
-        'i.description', 
-        'i.imagePath',
-        'i.createdAt', 
-        'u.name',
-        'u.surname',
-        'u.image',
-        'u.nick',
-        'c.id',
-        'l.id',
-        'l.createdAt',
-      ])
-      .orderBy('i.id', 'DESC')
-      .skip( pagination.skip )
-      .take(5)
-      .getManyAndCount();
   } 
 
   getImage( id: number ): Promise<Images> {
@@ -158,35 +118,12 @@ export class ImageService {
 
       try {
 
-        const image = await this.imageRepository.createQueryBuilder('i')
-          .leftJoinAndSelect('i.user', 'u')
-          .leftJoinAndSelect('i.comments', 'c')
-          .leftJoinAndSelect('i.likes', 'l')
-          .select([
-            'i.id', 
-            'i.description', 
-            'i.imagePath', 
-            'i.createdAt',
-            'u.name',
-            'u.surname',
-            'u.image',
-            'u.nick',
-            'c.id',
-            'c.content',
-            'c.createdAt',
-            'l.id',
-            'l.createdAt'
-          ])
-          .where('i.id = :id', { id })
-          .getOneOrFail();
-        
-        // get comments for image
-        image.comments = await this.commentService.getCommentsByImage( image.id );
-        
-        // get like for image
-        image.likes = await this.likeService.getLikes( image.id );
+        const image = await this.imageRepository.findOneOrFail({
+          where: { id },
+          relations: ['user', 'comments', 'likes', 'likes.user', 'comments.user']
+        });
 
-        // console.log( image.likes );
+        // console.log( image );
 
         resolve( image )
 

@@ -1,9 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Comments, Images, Users } from 'src/entities';
-import { ImageService } from 'src/image/image.service';
+import { Comments } from 'src/entities';
 import { LoggedMiddleware } from 'src/middleware';
-import { UserService } from 'src/user/user.service';
 import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
 

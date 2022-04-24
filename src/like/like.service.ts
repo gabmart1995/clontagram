@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Likes } from 'src/entities';
+import { Comments, Images, Likes } from 'src/entities';
 import { ImageService } from 'src/image/image.service';
 import { Repository } from 'typeorm';
 
@@ -10,7 +10,6 @@ export class LikeService {
   constructor(
     @InjectRepository(Likes)
     private readonly likeRepository: Repository<Likes>,    
-   //  private readonly imageService: ImageService
   ) {
 
   }
@@ -35,6 +34,7 @@ export class LikeService {
   }
 
   getLikes( imageId: number ) {
+
     return this.likeRepository.createQueryBuilder('l')
       .leftJoinAndSelect('l.user', 'u')
       .leftJoinAndSelect('l.image', 'i')
@@ -43,31 +43,32 @@ export class LikeService {
       .getMany();
   }
 
-  getLikesPaginate( userId: number, skip: number = 0 ): Promise<Likes[]> {
+  getLikesPaginate( userId: number, skip: number = 0 ): Promise<[ Likes[], number ]> {
     
     return new Promise( async ( resolve, reject ) => {
       
       try {
         
-        let likes = await this.likeRepository.createQueryBuilder('l')
-          .leftJoinAndSelect('l.user', 'u')
-          .innerJoinAndSelect('l.image', 'i')
-          .where('u.id = :userId', { userId })
-          .orderBy('l.id', 'DESC')
-          .skip( skip )
-          .take(5)
-          .getMany();
-        
-        /*for await ( const like of likes ) {
-          like.image = await this.imageService.getImage( like.image.id )
-        }*/
+          const likes = this.likeRepository.findAndCount({
+            where: { user: { id: userId } },
+            order: { id: 'DESC' },
+            relations: [
+              'image', 
+              'image.likes', 
+              'image.comments', 
+              'image.user', 
+              'image.likes.user'
+            ],
+            skip,
+            take: 5
+          });
 
         resolve( likes );
 
       } catch (error) {
         console.error( error );
+
         reject( error );
-      
       }
     });
   }
