@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Likes } from 'src/entities';
+import { ImageService } from 'src/image/image.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -8,7 +9,8 @@ export class LikeService {
   
   constructor(
     @InjectRepository(Likes)
-    private readonly likeRepository: Repository<Likes>
+    private readonly likeRepository: Repository<Likes>,    
+   //  private readonly imageService: ImageService
   ) {
 
   }
@@ -39,5 +41,34 @@ export class LikeService {
       .select(['l.id', 'l.createdAt', 'u.id'])
       .where('i.id = :id', { id: imageId })
       .getMany();
+  }
+
+  getLikesPaginate( userId: number, skip: number = 0 ): Promise<Likes[]> {
+    
+    return new Promise( async ( resolve, reject ) => {
+      
+      try {
+        
+        let likes = await this.likeRepository.createQueryBuilder('l')
+          .leftJoinAndSelect('l.user', 'u')
+          .innerJoinAndSelect('l.image', 'i')
+          .where('u.id = :userId', { userId })
+          .orderBy('l.id', 'DESC')
+          .skip( skip )
+          .take(5)
+          .getMany();
+        
+        /*for await ( const like of likes ) {
+          like.image = await this.imageService.getImage( like.image.id )
+        }*/
+
+        resolve( likes );
+
+      } catch (error) {
+        console.error( error );
+        reject( error );
+      
+      }
+    });
   }
 }

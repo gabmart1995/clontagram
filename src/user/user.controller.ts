@@ -29,38 +29,25 @@ export class UserController {
     let images: ImageType[] = [];
     let totalImages: number = 0;
 
-    pagination = pagination.page && pagination.skip ? { 
-      skip: Number( pagination.skip),
-      page: Number( pagination.page ) 
-    } : { 
-      skip: 0, 
-      page: 1 
-    };
+    if ( pagination.page && pagination.skip ) {
+      pagination = { skip: Number( pagination.skip ), page: Number( pagination.page ) };
+    
+    } else {
+      pagination = { skip: 0, page: 1 };
+    
+    }
 
     // consultamos las imagenes 
-    try {
-      const baseUrl = await app.getUrl();
-      
+    try {      
       [ images, totalImages ] = await this.imageService.getImagesUser(pagination);
-
-      // iterable asincrono para mapear las imagenes
-      for await ( const image of images ) {
-        
-        // image
-        if ( !image.user.image ) {
-          image.user.image = new URL('/image/no-image-icon.png', baseUrl ).toString();
-        }
-        
-        image.likes = await this.likeService.getLikes( image.id ); 
-      }
 
     } catch ( error ) {
       console.error( error );
+    
     }
 
     // images.forEach(( image ) => console.log( image ));
 
-  
     // to show variable in ejs return a object with props what you need
     return {
       title: 'User',

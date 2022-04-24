@@ -1,0 +1,14 @@
+<%- include('../partials/header', { title })  %> 
+<%- include('../partials/navbar', { userLogged }) %>
+
+<!-- JS components and libraries -->
+<script src="/js/pagination.component.js"></script>
+<script src="/js/time.helper.js"></script>
+<script src="/js/like.helper.js"></script>
+
+<div class="content-fluid d-flex flex-column align-items-center justify-content-center">
+    <% likes.forEach( ( like, index ) => { %>
+        <% include('../partials/image', { image: like.image, index, userLogged }) %>      
+    <% }) %>
+</div>
+<%- include('../partials/footer') %>

@@ -14,7 +14,7 @@ import { CommentsService } from './comments.service';
   controllers: [
     CommentsController,
   ],
-  providers: [CommentsService]
+  providers: [CommentsService],
 })
 export class CommentsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

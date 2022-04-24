@@ -2,6 +2,8 @@
 <%- include('../partials/navbar', { userLogged }) %>
   
   <script src="/js/time.helper.js"></script>
+  <script src="/js/like.helper.js"></script>
+  
   <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
       <% if (image) { %>
           <div class="card card-detail mb-2 pub_image pub-image-detail mt-5">
@@ -24,7 +26,20 @@
                   <p><%= image.description %></p>
                 </div>
                 <div class="likes">
-                  <i class="bi bi-heart-fill"></i>
+            
+                  <!-- comprobar si el usuario le dio like al imagen -->
+                  <% if ( image.likes.some( like => like.user.id === userLogged.id ) ) { %>
+                    <i class="bi bi-heart-fill btn-like pointer" data-id="<%= image.id %>"></i> <!-- like marcado -->
+                  
+                  <% } else { %>
+                    <i class="bi bi-heart-fill btn-dislike pointer" data-id="<%= image.id %>"></i>
+                  
+                  <% } %>
+                  
+                  <!-- numero de likes -->
+                  <span class="lighter likesCount number-likes">
+                    <%= image.likes.length  %>
+                  </span> 
                 </div>
                 <div class="clearfix"></div>
                 

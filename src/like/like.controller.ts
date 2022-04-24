@@ -1,7 +1,7 @@
-import { Controller, Get, Param, ParseIntPipe, Res,  Session } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Render, Res,  Session } from '@nestjs/common';
 import { Response } from 'express';
 import { Likes } from 'src/entities';
-import { SessionData } from 'src/types';
+import { Like, SessionData } from 'src/types';
 import { LikeService } from './like.service';
 
 /** controller de peticiones http desde el frontend  */
@@ -12,6 +12,32 @@ export class LikeController {
         private readonly likeService: LikeService
     ) {}
     
+  @Get()
+  @Render('likes/index')
+  async index(
+    @Session() session: SessionData
+  ) {
+    
+    let likes: Like[];
+
+    try {
+      likes = await this.likeService.getLikesPaginate( session.user.id as number );
+
+    } catch ( error ) {
+      console.error( error );
+
+    }
+
+    likes.forEach( (like) => console.log( like.image ));
+    
+    return {
+      title: 'Likes list',
+      userLogged: session.user,
+      likes
+    };
+  }
+
+
     @Get('/:image_id')
     async like(
         @Session() session: SessionData,

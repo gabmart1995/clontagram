@@ -14,10 +14,11 @@ import { UserService } from './user.service';
 @Module({
     imports: [
         TypeOrmModule.forFeature([ Users, Images, Comments, Likes ]),
-        MulterModule.register()
+        MulterModule.register(),
     ],
     controllers: [UserController],
-    providers: [UserService, ImageService, CommentsService, LikeService]
+    providers: [UserService, ImageService, CommentsService, LikeService],
+    exports: [UserModule]
 })
 export class UserModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {

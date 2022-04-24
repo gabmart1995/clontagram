@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { join } from 'path';
 import { CommentsService } from 'src/comments/comments.service';
 import { ERROR_MESSAGES, getFileName, regex, saveImages } from 'src/helpers';
+import { LikeService } from 'src/like/like.service';
 import { app } from 'src/main';
-import { Image as ImageType } from 'src/types';
+import { Image, Image as ImageType } from 'src/types';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { Images } from '../entities'
@@ -17,8 +18,11 @@ export class ImageService {
   constructor( 
     @InjectRepository(Images)
     private readonly imageRepository: Repository<Images>,
+    
+    @Inject(forwardRef( () => UserService ))
     private readonly userService: UserService,
-    private readonly commentService: CommentsService 
+    private readonly commentService: CommentsService,
+    private readonly likeService: LikeService 
   ) {}
 
   save( idUser: number,  form: Partial<ImageType>, file: Express.Multer.File ): Promise<{ success: string }> {
@@ -80,6 +84,51 @@ export class ImageService {
 
   getImagesUser( pagination: { skip: number } ): Promise<[Images[], number]> {
     
+    return new Promise( async ( resolve, reject ) => {
+
+      try {
+        
+        const [ images, imagesCount ] = await this.imageRepository.createQueryBuilder('i')
+        .leftJoinAndSelect('i.user', 'u')
+        .leftJoinAndSelect('i.comments', 'c')
+        .leftJoinAndSelect('i.likes', 'l')
+        .select([
+          'i.id', 
+          'i.description', 
+          'i.imagePath',
+          'i.createdAt', 
+          'u.name',
+          'u.surname',
+          'u.image',
+          'u.nick',
+          'c.id',
+          'l.id',
+          'l.createdAt',
+        ])
+        .orderBy('i.id', 'DESC')
+        .skip( pagination.skip )
+        .take(5)
+        .getManyAndCount();
+
+        // iterable asincrono para mapear las imagenes
+        for await ( const image of images ) {
+          
+          // image
+          if ( !image.user.image ) {
+            image.user.image = new URL('/image/no-image-icon.png', await app.getUrl() ).toString();
+          }
+          
+          image.likes = await this.likeService.getLikes( image.id ); 
+        }
+
+        resolve([ images, imagesCount ]);
+
+      } catch (error) {
+        reject( error ); 
+      
+      }
+    });  
+
     return this.imageRepository.createQueryBuilder('i')
       .leftJoinAndSelect('i.user', 'u')
       .leftJoinAndSelect('i.comments', 'c')
@@ -103,7 +152,7 @@ export class ImageService {
       .getManyAndCount();
   } 
 
-  getImage( id: number ) {
+  getImage( id: number ): Promise<Images> {
 
     return new Promise( async ( resolve, reject ) => {
 
@@ -112,6 +161,7 @@ export class ImageService {
         const image = await this.imageRepository.createQueryBuilder('i')
           .leftJoinAndSelect('i.user', 'u')
           .leftJoinAndSelect('i.comments', 'c')
+          .leftJoinAndSelect('i.likes', 'l')
           .select([
             'i.id', 
             'i.description', 
@@ -124,14 +174,19 @@ export class ImageService {
             'c.id',
             'c.content',
             'c.createdAt',
+            'l.id',
+            'l.createdAt'
           ])
           .where('i.id = :id', { id })
           .getOneOrFail();
         
         // get comments for image
         image.comments = await this.commentService.getCommentsByImage( image.id );
+        
+        // get like for image
+        image.likes = await this.likeService.getLikes( image.id );
 
-        // console.log( image.comments );
+        // console.log( image.likes );
 
         resolve( image )
 
