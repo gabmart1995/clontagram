@@ -175,3 +175,28 @@ pagination-component {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+
+.profile-user {
+    margin-top: 40px;
+    height: 200px;
+    margin-bottom: 40px;
+}
+
+.profile-user .info {
+    float: left;
+    padding-left: 30px;
+    padding-top: 30px;
+}
+
+.profile-user .container-avatar {
+    width: 200px !important;
+    height: 200px !important;
+    border-radius: 900px;
+    overflow: hidden;
+    float: left;
+}
+
+.profile-user .container-avatar img {
+    height: 100%;
+}

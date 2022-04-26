@@ -125,7 +125,7 @@ export class UserService {
 
   getUser( id: number ) {
     return this.userRepository.findOneOrFail({
-      select: ['id', 'name', 'surname', 'email', 'nick'],
+      select: ['id', 'name', 'surname', 'email', 'nick', 'image', 'createdAt'],
       where: {
         id
       }

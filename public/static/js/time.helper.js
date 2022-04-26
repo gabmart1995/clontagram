@@ -155,52 +155,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 let years = DATE_DIFFERENCES.inYears( date );
 
                 elementDates[index].innerText = months === 1 ? 
-                  `| Hace ${years} anio` : `| Hace ${years} anios`;
+                  `Hace ${years} anio` : `Hace ${years} anios`;
 
               } else {
 
                 elementDates[index].innerText = months === 1 ? 
-                  `| Hace ${months} mes` : `| Hace ${months} meses`;   
+                  `Hace ${months} mes` : `Hace ${months} meses`;   
               }
 
             } else {
 
               elementDates[index].innerText = weeks === 1 ? 
-                `| Hace ${weeks} semana` : `| Hace ${weeks} semanas`;
+                `Hace ${weeks} semana` : `Hace ${weeks} semanas`;
             }
 
           } else {
 
             elementDates[index].innerText = days === 1 ? 
-              `| Hace ${days} dia` : `| Hace ${days} dias`; 
+              `Hace ${days} dia` : `Hace ${days} dias`; 
           }
 
         } else {
           
           elementDates[index].innerText = hours === 1 ? 
-            `| Hace ${hours} hora` : `| Hace ${hours} horas`; 
+            `Hace ${hours} hora` : `Hace ${hours} horas`; 
         }
 
 
       } else {
 
         elementDates[index].innerText = minutes === 1 ? 
-          `| Hace ${minutes} minuto` : `| Hace ${minutes} minutos`; 
+          `Hace ${minutes} minuto` : `Hace ${minutes} minutos`; 
       }
 
     } else {
 
       elementDates[index].innerText = seconds === 1 ? 
-        `| Hace ${seconds} segundo` : `| Hace ${seconds} segundos`;        
+        `Hace ${seconds} segundo` : `Hace ${seconds} segundos`;        
     }
   }
 
   const elementDates = Array.from( document.querySelectorAll('.date')); 
-  
+  console.log( elementDates );
   if ( elementDates.length > 0 ) {
 
     const dates = elementDates.map( element => {
-      return new Date( element.innerText.slice(2) );
+      return new Date( element.innerText );
     });
     
     dates.forEach( setDate );

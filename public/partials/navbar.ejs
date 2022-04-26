@@ -15,17 +15,16 @@
                         <%= userLogged.name %> <%= userLogged.surname %> 
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropUser">
-                        <li><a href="" class="dropdown-item">Mi perfil</a></li>
+                        <li><a href="/user/<%= userLogged.id %>" class="dropdown-item">Mi perfil</a></li>
                         <li><a href="/user/config" class="dropdown-item">Configuracion</a></li>
                         <li><a href="/logout" class="dropdown-item">Cerrar sesion</a> </li>
                     </ul>
                 </li>
                 <li>
                     <!-- image -->
-                    <%- include('avatar', { userLogged }) %>
+                    <%- include('avatar', { userLogged }) -%>
                 </li>
             </ul>
-
 
         <% } else { %>
             

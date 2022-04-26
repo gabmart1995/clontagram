@@ -5,7 +5,7 @@
         <img src="<%= image.user.image %>" alt="avatar" class="img-avatar" />
       </div>  
       <div class="data-user">
-        <a href="/image/detail/<%= image.id %>" style="text-decoration: none; color: #444;">
+        <a href="/user/<%= image.user.id %>" style="text-decoration: none; color: #444;">
           <%= ( image.user.name + ' ' + image.user.surname )  %>
           <span class="nickname">| @<%= image.user.nick  %></span>
         </a>
@@ -17,7 +17,8 @@
       </div>
       <div class="description pb-0">
         <span class="nickname">@<%= image.user.nick %></span>  
-        <span class="nickname date">| <%= image.createdAt %></span> 
+        <span class="nickname">|</span> 
+        <span class="nickname date"><%= image.createdAt %></span> 
         <p><%= image.description %></p>
       </div>
       <div class="likes">
@@ -36,7 +37,7 @@
         </span> 
       </div>
       <div class="comments">
-        <a href="" class="btn btn-warning btn-sm m-3 ms-0 mt-0">Comentarios 
+        <a href="/image/detail/<%= image.id %>" class="btn btn-warning btn-sm m-3 ms-0 mt-0">Comentarios 
           (<%= image.comments.length %>)
         </a>
       </div>

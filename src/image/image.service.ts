@@ -133,6 +133,31 @@ export class ImageService {
       }
     });
   }
+
+  getImagesByUser( idUser: number ): Promise<Images[]> {
+
+    return new Promise( async ( resolve, reject ) => {
+
+      try {
+
+        const images = await this.imageRepository.find({
+          where: { user: { id: idUser } },
+          relations: ['user', 'comments', 'likes', 'likes.user', 'comments.user'],
+          order: {
+            id: 'DESC'
+          }
+        });
+
+        // console.log( image );
+
+        resolve( images )
+
+      } catch ( error ) {
+        
+        reject( error );
+      }
+    });
+  }
   
   validateForm( form: Partial<ImageType> ) {
     

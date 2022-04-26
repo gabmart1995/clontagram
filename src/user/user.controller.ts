@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Render, Req, Res, Session, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Render, Req, Res, Session, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { getDateTime } from 'src/helpers';
@@ -138,6 +138,34 @@ export class UserController {
       request.flash('errors', JSON.stringify( errors ));
 
       response.redirect('/user/config');
+    }
+  }
+
+  @Get('/:id')
+  @Render('profile')
+  async profile(
+    @Param('id', ParseIntPipe) idUser: number,
+    @Session() session: SessionData
+  ) {
+
+    let images: ImageType[];
+    let user: UsersType
+
+    try {
+      images = await this.imageService.getImagesByUser( idUser );
+      user = await this.userService.getUser( idUser );
+    
+    } catch (error) {
+      console.error( error );
+    }
+
+    console.log( user );
+
+    return {
+      title: 'profile',
+      images,
+      userLogged: session.user,
+      user
     }
   }
 }
