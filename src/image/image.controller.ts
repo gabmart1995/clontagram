@@ -95,7 +95,7 @@ export class ImageController {
       
       // console.log(image);
       
-      if ( user && ( user.id === image.user.id )) {
+      if ( ( user && image ) && ( user.id === image.user.id )) {
         // eliminar la imagen en db y el archivo asociado a la imagen
 
         const urlSplit = image.imagePath.slice( image.imagePath.indexOf('uploads') ).split('/');
@@ -115,5 +115,54 @@ export class ImageController {
       
       request.flash('errors', JSON.stringify({ general: error.message }));
     }
+  }
+
+  @Get('/edit/:id')
+  @Render('image/edit')
+  async edit(
+    @Param('id', ParseIntPipe) imageId: number,
+    @Session() session: SessionData,
+    @Req() request: Request,
+    @Res() response: Response
+  ) {
+    
+    const [ errors ] = request.flash('errors');
+
+    try {
+      
+      const user = session.user;
+      const image = await this.imageService.getImage( imageId );
+  
+      if ( ( user && image ) && ( image.user.id === user.id ) ) {
+        return {
+          title: 'editar imagen',
+          image,
+          errors: errors ? JSON.parse(errors) : undefined,
+          userLogged: user,
+          csrfToken: request.csrfToken()
+        }
+
+      } else {
+        response.redirect('/user');  
+      
+      }
+
+    } catch (error) {
+
+      console.error( error );
+
+      response.redirect('/user');  
+    }
+  }
+
+  @Post('/update')
+  @UseInterceptors(FileInterceptor('image_path'))
+  update(
+    @Session() session: SessionData,
+    @Body() form: Partial<ImageType>,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() response: Response,
+  ) {
+    console.log({ form, file });
   }
 }

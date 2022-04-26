@@ -1,0 +1,53 @@
+<%- include('../partials/header', { title }) -%> 
+<%- include('../partials/navbar', { userLogged }) -%>
+
+<div class="content-fluid d-flex flex-column align-items-center justify-content-center">
+        
+    <!-- alerts -->
+    <%- include('../partials/message', { errors }) -%>
+
+    <div class="card card-login mb-5 <%= (errors && errors.success ) || (errors && errors.general) ? 'mt-3' : 'mt-5' %>">
+        <div class="card-header">
+            Editar imagen              
+        </div>
+        <div class="card-body">
+
+            <!-- pasamos csrf token desde el url del post como ruta alternativa -->
+            <!-- ya el body no procesa en form-data el csrfToken -->
+            <form action="/image/update?_csrf=<%= csrfToken %>" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="<%= image.id %>" />
+                <div class="row mb-3">
+                    <label for="image_path" class="col-sm-3 col-form-label">Imagen:</label>
+                    <div class="col-sm-8">
+                        <div class="container-image">
+                            <img src="<%= image.imagePath %>" alt="avatar" class="img-avatar" />
+                        </div>
+                        <input type="file"  name="image_path" id="image_path" class="form-control" />
+                        <% if (errors && errors.image_path) { %>
+                            <div class="error-text"><%= errors.image_path %></div>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="description" class="col-sm-3 col-form-label">Descripcion:</label>
+                    <div class="col-sm-8">
+                        <textarea type="text" name="description" id="description" class="form-control"><%= image.description %></textarea>
+                        <% if (errors && errors.description) { %>
+                            <div class="error-text"><%= errors.description %></div>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="offset-sm-3 col-sm-8 mt-3">
+                        <div class="d-flex flex-row align-items-center">
+                            <input type="submit" value="Actualizar imagen" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') -%>

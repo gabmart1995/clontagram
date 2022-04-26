@@ -45,10 +45,34 @@
 
                 <!-- actions -->
                 <% if ( userLogged.id === image.user.id ) { %>
+                  
                   <div class="actions">
-                    <a href="" class="btn btn-primary btn-sm">Actualizar</a>
-                    <a href="/image/delete/<%= image.id %>" class="btn btn-danger btn-sm">Borrar</a>
+                    <a href="/image/edit/<%= image.id %>" class="btn btn-primary btn-sm">Actualizar</a>
+                    <a role="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" aria-hidden="true">Eliminar</a>
                   </div>
+
+                  <!-- delete modal -->
+                  <div class="modal fade" tabindex="-1" id="deleteModal">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Eliminar publicacion:</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>
+                            Si eliminas la imagen perderas todos los likes y comentarios asociados a la publicacion <br><br>
+                            Estas seguro??
+                          </p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          <a href="/image/delete/<%= image.id %>" type="button" class="btn btn-danger">Confirmar</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 <% } %>
 
                 <div class="clearfix"></div>

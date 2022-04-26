@@ -200,3 +200,13 @@ pagination-component {
 .profile-user .container-avatar img {
     height: 100%;
 }
+
+.container-image {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+}
+
+.container-image img {
+    border-radius: 10px;
+}

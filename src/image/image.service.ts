@@ -78,6 +78,65 @@ export class ImageService {
     });
   }
 
+  update( idUser: number,  form: Partial<ImageType>, file: Express.Multer.File  ) {
+    
+    return new Promise( async ( resolve, reject ) => {
+      
+      const errors: { [key: string]: string } = {};
+      const errorsForm = this.validateForm( form );
+      
+      
+      if ( file ) {
+        
+        const errorsFile = this.validateImage( file );
+        
+        if (
+          (errorsForm.size > 0 && errorsFile.size > 0) || 
+          (errorsForm.size > 0 || errorsFile.size > 0) 
+        ) {
+            
+            errorsForm.forEach(( value, key ) => {
+              errors[key] = value;
+            });
+            
+            errorsFile.forEach(( value, key ) => {
+              errors[key] = value;
+            });
+            
+            // console.log( errors );
+            
+            reject( errors );
+            
+            return;
+        }
+
+        // create the url to image
+        const fileName = getFileName( file );
+        const url = new URL('/uploads/images/' + fileName, ( await app.getUrl() ));
+    
+        form.imagePath = url.toString();
+      
+      } else {
+
+        if ( errorsForm.size > 0 ) {
+          
+          errorsForm.forEach(( value, key ) => {
+            errors[key] = value;
+          });
+           
+          // console.log( errors );
+          
+          reject( errors );
+          
+          return;
+        } 
+      }
+
+      // try ... 
+    });
+    
+  }
+
   getImagesUser( pagination: { skip: number } ): Promise<[Images[], number]> {
     
     return new Promise( async ( resolve, reject ) => {
