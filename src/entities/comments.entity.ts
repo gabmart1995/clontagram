@@ -19,13 +19,16 @@ export class Comments {
     // relations
     @ManyToOne(
         () => Users,
-        ( user ) => user.comments  
+        ( user ) => user.comments,
+        // { onDelete: 'CASCADE', cascade: true }  
     )
     user: Users;
 
+    // if delete the publication delete child relations on cascade
     @ManyToOne(
         () => Images,
-        ( image ) => image.comments
+        ( image ) => image.comments,
+        { onDelete: 'CASCADE', cascade: true }
     )
     image: Images
 }

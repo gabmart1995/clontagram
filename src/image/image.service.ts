@@ -158,6 +158,10 @@ export class ImageService {
       }
     });
   }
+
+  deleteImage( image: Images ) {
+    return this.imageRepository.remove( image );
+  }
   
   validateForm( form: Partial<ImageType> ) {
     

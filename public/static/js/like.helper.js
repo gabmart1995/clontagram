@@ -1,7 +1,13 @@
+/**
+ * @author gabmart1995
+ * helper para controlar los likes de cada publicacion
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
   
   const url = 'http://localhost:3000';
 
+  /** funcion que asigna los eventos like a sus elementos DOM */
   const like = () => {
     
     const buttonsLike = document.querySelectorAll('.btn-like');
@@ -54,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
    }
   
+  /** funcion que asigna los eventos dislike a sus elementos DOM */
   const dislike = () => {
 
     const buttonsDislike = document.querySelectorAll('.btn-dislike');  

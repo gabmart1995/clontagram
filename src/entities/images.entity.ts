@@ -21,23 +21,24 @@ export class Images {
 
     // relations
     // one user asociated to image
+    
     @ManyToOne(
         () => Users,
-        ( user ) => user.images    
+        ( user ) => user.images,     
     )
     user: Users
     
     // all likes asosiated to image
     @OneToMany(
         () => Likes,
-        ( like ) => like.image
+        ( like ) => like.image,
     )
     likes: Likes[]
 
     // all comments asosiated to image
     @OneToMany(
         () => Comments,
-        ( comment ) => comment.image
+        ( comment ) => comment.image,
     )
     comments: Comments[]
 }

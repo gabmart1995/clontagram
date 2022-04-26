@@ -15,14 +15,16 @@ export class Likes {
     // user asociated to like
     @ManyToOne(
         () => Users,
-        ( user ) => user.likes
+        ( user ) => user.likes,
     )
     user: Users;
     
     // image asociated to like
+    // if delete the publication delete child relations on cascade
     @ManyToOne(
         () => Images,
-        ( image ) => image.likes
+        ( image ) => image.likes,
+        { onDelete: 'CASCADE', cascade: true } 
     )
     image: Images;
 }

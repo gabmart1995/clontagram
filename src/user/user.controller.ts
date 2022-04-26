@@ -159,7 +159,7 @@ export class UserController {
       console.error( error );
     }
 
-    console.log( user );
+    // console.log( user );
 
     return {
       title: 'profile',

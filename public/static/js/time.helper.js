@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Funcion que calcula la differencia en segundos
      * @param {Date} date1 fecha obtenida en BD
      * @param {Date} date2 fecha actual
-     * @returns {number}  retorna la cantidad de segundos transcurridas
+     * @returns {number}  retorna la cantidad de segundos transcurridos
      */
       inSeconds: ( date1, date2 = new Date() ) => {
       
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Funcion que calcula la differencia en minutos
      * @param {Date} date1 fecha obtenida en BD
      * @param {Date} date2 fecha actual
-     * @returns {number}  retorna la cantidad de horas transcurridas
+     * @returns {number}  retorna la cantidad de minutos transcurridos
      */
       inMinutes: ( date1, date2 = new Date() ) => {
       
@@ -196,10 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const elementDates = Array.from( document.querySelectorAll('.date')); 
-  console.log( elementDates );
+  
+  // console.log( elementDates );
+  
   if ( elementDates.length > 0 ) {
 
+
     const dates = elementDates.map( element => {
+      
+      console.log( element.innerText );
+      
       return new Date( element.innerText );
     });
     

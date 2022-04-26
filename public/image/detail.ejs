@@ -22,7 +22,8 @@
                 </div>
                 <div class="description pb-0">
                   <span class="nickname">@<%= image.user.nick %></span>
-                  <span class="nickname date">| <%= image.createdAt %></span>  
+                  <span class="nickname">|</span>
+                  <span class="nickname date"><%= image.createdAt %></span>  
                   <p><%= image.description %></p>
                 </div>
                 <div class="likes">
@@ -41,6 +42,15 @@
                     <%= image.likes.length  %>
                   </span> 
                 </div>
+
+                <!-- actions -->
+                <% if ( userLogged.id === image.user.id ) { %>
+                  <div class="actions">
+                    <a href="" class="btn btn-primary btn-sm">Actualizar</a>
+                    <a href="/image/delete/<%= image.id %>" class="btn btn-danger btn-sm">Borrar</a>
+                  </div>
+                <% } %>
+
                 <div class="clearfix"></div>
                 
                 <div class="comments">
@@ -72,7 +82,8 @@
 
                     <div class="comment">
                       <span class="nickname">@<%= comment.user.nick %></span>
-                      <span class="nickname date">| <%= comment.createdAt %></span>  
+                      <span class="nickname">|</span>
+                      <span class="nickname date"><%= comment.createdAt %></span>  
                       <p><%= comment.content %></p>
                       <% if (comment && ( comment.user.id === userLogged.id )) { %>
                         <a href="/comments/delete/<%= comment.id %>" class="btn btn-sm btn-danger">Eliminar</a>

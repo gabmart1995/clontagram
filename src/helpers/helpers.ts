@@ -1,4 +1,4 @@
-import { writeFile } from "fs/promises";
+import { writeFile, unlink } from "fs/promises";
 
 const regex = Object.freeze({
     string: (/^[\w\s]{1,25}$/),
@@ -116,6 +116,10 @@ function saveImages( data: Buffer, destination: string ) {
   return writeFile( destination, data );
 }
 
+function deleteImages( path: string ) {
+  return unlink( path );
+}
+
 function getFileName( file: Express.Multer.File ): string {
       
   const uniqueSuffix = Date.now() + '-' + Math.round( Math.random() * 1e9 )
@@ -145,5 +149,6 @@ export {
   getDateTime,
   saveImages,
   getFileName,
-  DATE_DIFFERENCES
+  DATE_DIFFERENCES,
+  deleteImages
 }
