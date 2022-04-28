@@ -2,8 +2,8 @@
 Diseno de red social construido con nestjs framework.
 
 ### requisitos:
-node >= 12.0
-mysql o mariadb >= 10.0
+- node >= 12.0
+- mysql o mariadb >= 10.0
 
 ## Instalacion
 
