@@ -5,13 +5,13 @@ Diseno de red social construido con nestjs framework.
 node >= 12.0
 mysql o mariadb >= 10.0
 
-## Installation
+## Instalacion
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## Correr the app
 
 ```bash
 # development
@@ -24,7 +24,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## Pruebas unitarias
 
 ```bash
 # unit tests
@@ -37,7 +37,7 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Stay in touch
+## Estamos en contacto
 
 - Author - [Gabriel Martinez](https://gabmart1995.github.io)
 
