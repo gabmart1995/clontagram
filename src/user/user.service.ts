@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Users } from '../entities';
 import { Users as UsersType } from '../types'
 import { regex, ERROR_MESSAGES, getFileName, saveImages } from '../helpers';
@@ -156,6 +156,32 @@ export class UserService {
 
         reject( error );
       }
+    });
+  }
+
+  getUsers( pagination: { skip: number, search?: string } ) {
+
+    if ( pagination.search ) {
+
+      // console.log( pagination.search );
+
+      return this.userRepository.findAndCount({
+        where: [
+          { nick: Like('%' + pagination.search  + '%')  }, 
+          { name: Like('%' + pagination.search  + '%') },
+          { surname: Like('%' + pagination.search  + '%') }
+        ],
+        order: { id: 'DESC' },
+        take: 5,
+        skip: pagination.skip,
+      });
+    }
+
+
+    return this.userRepository.findAndCount({
+      order: { id: 'DESC' },
+      take: 5,
+      skip: pagination.skip
     });
   }
 

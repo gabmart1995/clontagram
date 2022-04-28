@@ -1,0 +1,84 @@
+<%- include('../partials/header', { title })  -%> 
+<%- include('../partials/navbar', { userLogged }) -%>
+
+<!-- JS components and libraries -->
+<script src="/js/pagination.component.js"></script>
+<script src="/js/time.helper.js"></script>
+<script src="/js/like.helper.js"></script>
+
+<div class="content-fluid d-flex flex-column align-items-center justify-content-center">
+    
+	<h2 class="mt-4 w-50">Personas</h2>
+  <hr class="w-50 separator" />
+
+	<form action="/user/people" method="get" class="w-50 mt-3" id="form-search">
+		<div class="row">
+			<div class="form-group col-11 mt-2">
+				<input type="text" id="search" class="form-control" />
+			</div>
+			<div class="form-group col-1 mt-2 btn-search">
+				<input type="submit" value="Buscar" class="btn btn-success" />
+			</div>
+		</div>
+	</form>
+
+  <!-- muestra las tarjetas de la imagen -->
+	<% if ( users.length > 0 ) { %>
+	 
+		<% users.forEach( ( user, index ) => { %>  
+	
+			<div class="profile-user align-self-center w-50">
+				<% if (user.image) { %>
+					<div class="container-avatar">
+						<img src="<%= user.image %> " alt="logo" class="img-avatar" />
+					</div>
+				<% } %>
+				<div class="info">
+					<h2>@<%= user.nick %></h2>
+					<h3><%= user.name %> <%= user.surname %></h3>
+					<p>Se unio: <span class="date"><%= user.createdAt %></span></p>
+					<a href="/user/<%= user.id %>" class="btn btn-sm btn-success">Ver perfil</a>
+				</div>
+		
+				<div class="clearfix"></div>
+				<hr class="mt-4">
+			</div>
+	
+		<% }) %>
+		
+		<!-- pagination element -->
+		<div class="mt-4 w-50">
+			<pagination-component 
+				page="<%= pagination.page  %>" 
+				registers="<%= totalUsers %>"
+				url="http://localhost:3000/user/people"
+			></pagination-component>
+		</div>
+		
+	<% } else { %>
+
+		<h3 class="mt-5" style="color: red;">Sin resultados de busqueda</h3>
+	
+	<% } %>
+  
+</div>
+
+<!-- script del buscador -->
+<script>
+	
+	const formSearch = document.querySelector('#form-search');
+	
+	// intercepta el formulario y cambia la url de la acccion
+	formSearch.addEventListener('submit', ( $event ) => {
+		
+		// $event.preventDefault();
+		
+		const element = $event.target;
+		const search = element.querySelector('#search').value;
+
+		element.setAttribute('action', `/user/people/${search}` );
+	});
+
+</script>
+
+<%- include('../partials/footer') -%>

@@ -17,7 +17,7 @@ export class UserController {
   ) {}
 
   @Get()
-  @Render('user')
+  @Render('user/user')
   async index( 
     @Session() session: SessionData, 
     @Req() request: Request, 
@@ -141,6 +141,64 @@ export class UserController {
     }
   }
 
+  // optional params
+  @Get('/people/:search?')
+  @Render('user/index')
+  async people(
+    @Session() session: SessionData,
+    @Query() pagination: { skip: number, page: number }, 
+    @Param('search') search?: string
+  ) {
+
+    let users: UsersType[];
+    let totalUsers: number;
+
+    // console.log( search );
+    
+    if ( pagination.page && pagination.skip ) {
+      pagination = { skip: Number( pagination.skip ), page: Number( pagination.page ) };
+    
+    } else {
+      pagination = { skip: 0, page: 1 };
+    
+    }
+
+    try {
+      
+      [ users, totalUsers ] = await this.userService.getUsers({ skip: pagination.skip, search });
+
+      for await ( const user of users ) {
+
+        delete user.password;
+        delete user.role;
+        delete user.rememberToken;
+        
+        if  ( !user.image ) {
+          
+          const url = new URL( '/image/no-image-icon.png', await app.getUrl() ).toString();
+          
+          // console.log( url );
+          
+          user.image = url;
+        }
+      }
+
+      // console.log({ users, totalUsers });
+
+    } catch (error) {
+      
+      console.error( error );
+    }
+
+    return {
+      title: 'people',
+      userLogged: session.user,
+      users,
+      pagination,
+      totalUsers
+    };
+  }
+
   @Get('/:id')
   @Render('profile')
   async profile(
@@ -154,7 +212,20 @@ export class UserController {
     try {
       images = await this.imageService.getImagesByUser( idUser );
       user = await this.userService.getUser( idUser );
-    
+
+      delete user.password;
+      delete user.role;
+      delete user.rememberToken;
+
+      if  ( !user.image ) {
+        
+        const url = new URL( '/image/no-image-icon.png', await app.getUrl() ).toString();
+        
+        // console.log( url );
+        
+        user.image = url;
+      }
+      
     } catch (error) {
       console.error( error );
     }

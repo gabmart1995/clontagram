@@ -1,5 +1,5 @@
-<%- include('partials/header', { title })  -%> 
-<%- include('partials/navbar', { userLogged }) -%>
+<%- include('../partials/header', { title })  -%> 
+<%- include('../partials/navbar', { userLogged }) -%>
 
 <!-- JS components and libraries -->
 <script src="/js/pagination.component.js"></script>
@@ -8,11 +8,11 @@
 
 <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
   
-  <%- include('partials/message', { errors }) %>
+  <%- include('../partials/message', { errors }) %>
   
   <!-- muestra las tarjetas de la imagen -->
   <% images.forEach( ( image, index ) => { %>
-    <%- include('partials/image', { image, index }) %>
+    <%- include('../partials/image', { image, index }) %>
   <% }) %>
   
   <!-- pagination element -->
@@ -23,4 +23,4 @@
   ></pagination-component>
 </div>
 
-<%- include('partials/footer') -%>
+<%- include('../partials/footer') -%>

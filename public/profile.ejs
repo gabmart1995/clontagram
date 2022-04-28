@@ -26,10 +26,19 @@
 
   <div class="clearfix"></div>
 
-  <!-- muestra las tarjetas de la imagen -->
-  <% images.forEach( ( image, index ) => { %>
-    <%- include('partials/image', { image, index }) -%>
-  <% }) %>
+  <% if (images.length > 0) { %>
+    
+    <!-- muestra las tarjetas de la imagen -->
+    <% images.forEach( ( image, index ) => { %>
+      <%- include('partials/image', { image, index }) -%>
+    <% }) %>
+  
+  <% } else { %>
+
+    <h3 class="mt-5" style="color: red;">Sin publicaciones</h3>
+  
+  <% } %> 
+
   
 </div>
 

@@ -3,9 +3,10 @@
  * helper para controlar los likes de cada publicacion
  */
 
+const url = 'http://localhost:3000';
+
 document.addEventListener('DOMContentLoaded', () => {
   
-  const url = 'http://localhost:3000';
 
   /** funcion que asigna los eventos like a sus elementos DOM */
   const like = () => {

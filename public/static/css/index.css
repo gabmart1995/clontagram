@@ -210,3 +210,8 @@ pagination-component {
 .container-image img {
     border-radius: 10px;
 }
+
+.btn-search {
+    margin-left: 0;
+    padding-left: 0;
+}
