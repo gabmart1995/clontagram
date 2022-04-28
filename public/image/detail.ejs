@@ -6,7 +6,8 @@
   
   <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
       <% if (image) { %>
-          <div class="card card-detail mb-2 pub_image pub-image-detail mt-5">
+          <%- include('../partials/message', { errors }) %>
+          <div class="card card-detail mb-2 pub_image pub-image-detail mt-4">
               <div class="card-header">
                 <div class="container-avatar">
                   <img src="<%= image.user.image %>" alt="avatar" class="img-avatar" />
@@ -89,8 +90,6 @@
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <input type="hidden" name="imageId"  value="<%= image.id %>" />
                     
-                    <%- include('../partials/message', { errors }) %>
-
                     <textarea class="form-control mt-2 <%= errors && errors.content ? 'error-field' : ''  %>" name="content" id="content"></textarea>
                     <% if (errors && errors.content) { %>
                       <div class="error-text"><%= errors.content %></div>

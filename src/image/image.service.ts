@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { join } from 'path';
 import { CommentsService } from 'src/comments/comments.service';
-import { ERROR_MESSAGES, getFileName, regex, saveImages } from 'src/helpers';
+import { ERROR_MESSAGES, getDateTime, getFileName, regex, saveImages } from 'src/helpers';
 import { LikeService } from 'src/like/like.service';
 import { app } from 'src/main';
 import { Image, Image as ImageType } from 'src/types';
@@ -78,14 +78,20 @@ export class ImageService {
     });
   }
 
-  update( idUser: number,  form: Partial<ImageType>, file: Express.Multer.File  ) {
+  update(  form: Partial<ImageType>, file: Express.Multer.File  ): Promise<{ success: string }> {
     
     return new Promise( async ( resolve, reject ) => {
       
       const errors: { [key: string]: string } = {};
       const errorsForm = this.validateForm( form );
       
-      
+      let fileName: string;
+      const data: Partial<ImageType> = { 
+        description: form.description,
+        updatedAt: getDateTime().default
+      };
+
+
       if ( file ) {
         
         const errorsFile = this.validateImage( file );
@@ -111,10 +117,10 @@ export class ImageService {
         }
 
         // create the url to image
-        const fileName = getFileName( file );
+        fileName = getFileName( file );
         const url = new URL('/uploads/images/' + fileName, ( await app.getUrl() ));
     
-        form.imagePath = url.toString();
+        data.imagePath = url.toString();
       
       } else {
 
@@ -132,7 +138,28 @@ export class ImageService {
         } 
       }
 
-      // try ... 
+      try {
+        
+        await this.imageRepository.update( Number( form.id ), data );
+        
+        if ( file && data.imagePath ) {
+          await saveImages( file.buffer, join( this.storagePath, fileName ) );
+        }
+
+        resolve({ success: 'La publicacion ha sido actualizada con exito' });
+
+      } catch (error) {
+
+        console.error( error );
+
+        errorsForm.set('general', error.message);
+
+        errorsForm.forEach(( value, key ) => {
+          errors[key] = value;
+        });
+
+        reject( errors );
+      }
     });
     
   }

@@ -157,12 +157,26 @@ export class ImageController {
 
   @Post('/update')
   @UseInterceptors(FileInterceptor('image_path'))
-  update(
-    @Session() session: SessionData,
+  async update(
+    @Req() request: Request,
+    @Res() response: Response,
     @Body() form: Partial<ImageType>,
     @UploadedFile() file: Express.Multer.File,
-    @Res() response: Response,
   ) {
-    console.log({ form, file });
+    
+    try {
+      
+      const message = await this.imageService.update( form, file );
+      
+      request.flash('errors', JSON.stringify( message ));
+      response.redirect( '/image/detail/' + form.id );
+      
+      // console.log( form );
+
+    } catch ( errors ) {
+
+      request.flash('errors', JSON.stringify( errors ));
+      response.redirect( '/image/edit/' + form.id );
+    }
   }
 }

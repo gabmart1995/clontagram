@@ -22,7 +22,7 @@
                         <div class="container-image">
                             <img src="<%= image.imagePath %>" alt="avatar" class="img-avatar" />
                         </div>
-                        <input type="file"  name="image_path" id="image_path" class="form-control" />
+                        <input type="file"  name="image_path" id="image_path" class="form-control <%= errors && errors.image_path ? 'error-field' : '' %>" />
                         <% if (errors && errors.image_path) { %>
                             <div class="error-text"><%= errors.image_path %></div>
                         <% } %>
@@ -31,7 +31,8 @@
                 <div class="row mb-3">
                     <label for="description" class="col-sm-3 col-form-label">Descripcion:</label>
                     <div class="col-sm-8">
-                        <textarea type="text" name="description" id="description" class="form-control"><%= image.description %></textarea>
+                        <textarea type="text" name="description" id="description" 
+                            class="form-control <%= errors && errors.description ? 'error-field' : '' %>"><%= image.description %></textarea>
                         <% if (errors && errors.description) { %>
                             <div class="error-text"><%= errors.description %></div>
                         <% } %>
