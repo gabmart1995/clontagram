@@ -13,7 +13,7 @@
     
     <% likes.forEach( ( like, index ) => { %> 
         <%- include('../partials/image', { image: like.image, index, userLogged }); %>      
-    <% }) %>
+    <% }); %>
 
     <!-- pagination element -->
   <pagination-component 
