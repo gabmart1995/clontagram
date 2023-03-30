@@ -14,13 +14,21 @@
   <% images.forEach( ( image, index ) => { %>
     <%- include('../partials/image', { image, index }) %>
   <% }) %>
+
+  <% if (images.length > 0) { %>
+    
+    <!-- pagination element -->
+    <pagination-component 
+      page="<%= pagination.page  %>" 
+      registers="<%= totalImages %>"
+      url="http://localhost:3000/user"
+    ></pagination-component>
+
+  <% } else { %>
+
+    <p class="text-danger mt-4">No se encontraron publicaciones</p>
   
-  <!-- pagination element -->
-  <pagination-component 
-    page="<%= pagination.page  %>" 
-    registers="<%= totalImages %>"
-    url="http://localhost:3000/user"
-  ></pagination-component>
+  <% } %>
 </div>
 
 <%- include('../partials/footer') -%>

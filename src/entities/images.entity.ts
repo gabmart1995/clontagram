@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, CreateDateColumn } from "typeorm";
 import { Comments, Likes, Users } from ".";
 import { getDateTime } from "src/helpers";
 
@@ -13,10 +13,10 @@ export class Images {
     @Column("text")
     description: string;
 
-    @Column("datetime")
+    @CreateDateColumn()
     createdAt: string;
 
-    @Column("datetime")
+    @CreateDateColumn()
     updatedAt: string
 
     // relations

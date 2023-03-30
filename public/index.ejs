@@ -1,9 +1,9 @@
-<%- include('partials/header', { title })  -%> 
-<%- include('partials/navbar', { userLogged }) -%>
+<%- include('partials/header')  -%> 
+<%- include('partials/navbar') -%>
     <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
 
         <!-- alerts -->
-        <%- include('partials/message', { errors }) -%>
+        <%- include('partials/message') -%>
 
         <div class="card card-login <%= (errors && errors.success ) || (errors && errors.general) ? 'mt-4' : 'mt-5' %>">
             <div class="card-header">

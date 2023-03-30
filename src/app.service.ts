@@ -31,9 +31,11 @@ export class AppService {
         });
 
         reject( errors );
-
+        
         return;
       }
+
+      console.log({errors, errorsMap});
 
       try {
         
@@ -43,13 +45,14 @@ export class AppService {
 
         // create a copy userEntity to store in db.
         const userEntity = this.userRepository.create( user );
+
         await this.userRepository.save( userEntity );
 
         // resolve the promise.
         resolve({ success: 'Usuario registrado con exito' });
 
       } catch ( error ) {
-
+        console.log( error );
         errorsMap.set('general', error.message);
 
         errorsMap.forEach(( value, key ) => { 
@@ -83,7 +86,7 @@ export class AppService {
       try {
         
         const user = await this.userRepository.findOneOrFail({
-          select: [ 'id', 'name', 'nick', 'password', 'surname', 'email', 'createdAt', 'updatedAt', 'role', 'rememberToken', 'image' ],
+          // select: [ 'id', 'name', 'nick', 'password', 'surname', 'email', 'createdAt', 'updatedAt', 'role', 'rememberToken', 'image' ],
           where: { email: form.email }
         });
 
@@ -102,7 +105,7 @@ export class AppService {
 
         delete user.password;
 
-        if ( user.image.length === 0 ) {
+        if ( !user || user.image.length === 0 ) {
           user.image = new URL('/image/no-image-icon.png', (await app.getUrl())).toString();
         }
 
@@ -112,6 +115,8 @@ export class AppService {
         
       } catch ( error ) {
         
+        console.log( error );
+
         errorsMap.set('general', error.message);
 
         errorsMap.forEach(( value, key ) => {

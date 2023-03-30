@@ -76,6 +76,8 @@ export class AppController {
 
     } catch ( errors ) {
       
+      console.error( errors );
+
       request.flash('errors', JSON.stringify(errors));
       response.redirect('/register');
     }
@@ -95,6 +97,8 @@ export class AppController {
       email: form.email.trim(),
       password: form.password.trim()
     };
+
+    console.log(form);
 
     try {
       

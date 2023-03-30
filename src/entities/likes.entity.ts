@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Images, Users } from '.';
 
 @Entity()
@@ -6,10 +6,10 @@ export class Likes {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column("datetime")
+    @CreateDateColumn()
     createdAt: string;
 
-    @Column("datetime")
+    @CreateDateColumn()
     updatedAt: string;
 
     // user asociated to like

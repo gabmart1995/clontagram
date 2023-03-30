@@ -1,5 +1,5 @@
 import { getDateTime } from "src/helpers";
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique, CreateDateColumn } from "typeorm";
 import { Comments, Images, Likes } from '.'
 
 @Entity()
@@ -29,16 +29,16 @@ export class Users {
     @Column("varchar", { length: 255 })
     password: string;
 
-    @Column("varchar", { length: 255 })
+    @Column("varchar", { length: 255, default: '' })
     image: string;
 
-    @Column("datetime")
+    @CreateDateColumn()
     createdAt: string;
 
-    @Column("datetime")
+    @CreateDateColumn()
     updatedAt: string;
 
-    @Column("varchar", { length: 255 })
+    @Column("varchar", { length: 255, default: null })
     rememberToken: string;
 
     // relations

@@ -1,5 +1,5 @@
 import { getDateTime } from "src/helpers";
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from "typeorm";
 import { Users, Images } from ".";
 
 @Entity()
@@ -10,10 +10,10 @@ export class Comments {
     @Column("text")
     content: string;
 
-    @Column("datetime")
+    @CreateDateColumn()
     createdAt: string;
 
-    @Column("datetime")
+    @CreateDateColumn()
     updatedAt: string;
 
     // relations

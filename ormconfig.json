@@ -3,8 +3,8 @@
     "type": "mysql",
     "host": "localhost",
     "port": 3306,
-    "username": "root",
-    "password": "",
+    "username": "test",
+    "password": "123456",
     "database": "clontagram",
     "entities": ["dist/entities/*.entity{.ts,.js}"],
     "synchronize": false
