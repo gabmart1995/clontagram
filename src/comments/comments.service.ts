@@ -41,7 +41,7 @@ export class CommentsService {
           user: { id: comment.user.id }
         });
         
-        console.log( commentEntity );
+        // console.log( commentEntity );
 
         await this.commentRepository.save( commentEntity );
 

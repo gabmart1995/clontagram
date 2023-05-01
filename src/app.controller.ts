@@ -98,7 +98,7 @@ export class AppController {
       password: form.password.trim()
     };
 
-    console.log(form);
+    // console.log(form);
 
     try {
       

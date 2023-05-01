@@ -35,7 +35,7 @@ export class AppService {
         return;
       }
 
-      console.log({errors, errorsMap});
+      // console.log({errors, errorsMap});
 
       try {
         

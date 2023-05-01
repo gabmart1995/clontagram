@@ -11,7 +11,8 @@ import { INestApplication } from '@nestjs/common';
 
 // modules es5 import using require
 // import return undefined
-const flash = require('connect-flash')
+const flash = require('connect-flash');
+
 // export app info 
 let app: INestApplication & NestExpressApplication;
 
@@ -46,7 +47,9 @@ async function bootstrap() {
     .use( csrfMiddleware );
   
   // ready server
-  await app.listen(3000);
+  await app.listen(3000, () => {
+    console.log('Server running in the port: ' + (3000).toString());
+  });
 }
 
 bootstrap();
