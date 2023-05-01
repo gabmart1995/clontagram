@@ -34,7 +34,7 @@ async function bootstrap() {
   // set forms, session, middlewares, cookies and csrf protection
   // important: parse forms y cookie parser before send csrfmiddleware 
   app
-    .use( cors({ origin: process.env.APP_NAME }) )
+    .use( cors({ origin: process.env.APP_NAME, methods: 'GET' }) )
     .use( bodyParser.urlencoded({ extended: true }) )
     .use( 
       session({
