@@ -3,7 +3,7 @@
  * helper para controlar los likes de cada publicacion
  */
 
-const url = 'http://localhost:3000';
+const url = 'http://clontagram.local';
 
 document.addEventListener('DOMContentLoaded', () => {
   

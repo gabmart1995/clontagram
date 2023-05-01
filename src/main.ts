@@ -7,7 +7,11 @@ import * as csurf from 'csurf';
 import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
 import { INestApplication } from '@nestjs/common';
+
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // modules es5 import using require
 // import return undefined
@@ -30,6 +34,7 @@ async function bootstrap() {
   // set forms, session, middlewares, cookies and csrf protection
   // important: parse forms y cookie parser before send csrfmiddleware 
   app
+    .use( cors({ origin: process.env.APP_NAME }) )
     .use( bodyParser.urlencoded({ extended: true }) )
     .use( 
       session({
@@ -47,8 +52,8 @@ async function bootstrap() {
     .use( csrfMiddleware );
   
   // ready server
-  await app.listen(3000, () => {
-    console.log('Server running in the port: ' + (3000).toString());
+  await app.listen(process.env.PORT, () => {
+    console.log('Server running in the port: ' + process.env.PORT);
   });
 }
 

@@ -5,6 +5,7 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "main": "dist/main.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -29,7 +30,9 @@
     "body-parser": "1.20.0",
     "connect-flash": "0.1.1",
     "cookie-parser": "1.4.6",
+    "cors": "^2.8.5",
     "csurf": "1.11.0",
+    "dotenv": "^16.0.3",
     "ejs": "3.1.6",
     "express-session": "1.17.2",
     "multer": "1.4.4",

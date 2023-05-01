@@ -3,6 +3,8 @@
 /node_modules
 /public/static/uploads/users/*
 /public/static/uploads/images/*
+.env
+package-lock.json
 
 # Logs
 logs
