@@ -6,7 +6,7 @@
     "username": "test",
     "password": "123456",
     "database": "clontagram",
-    "entities": ["dist/entities/*.entity{.ts,.js}"],
+    "entities": ["/home/gabriel/Escritorio/proyects/nodejs-proyects/clontagram/dist/entities/*.entity{.ts,.js}"],
     "synchronize": false
   }
   

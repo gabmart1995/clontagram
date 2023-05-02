@@ -97,8 +97,7 @@ customElements.define('pagination-component', class PaginationComponent extends 
     
     let skip = ( +page - 1 ) * pagination;
     
-    const url = this.getAttribute('url');    
-    
+    const url = this.getAttribute('url'); 
     // console.log({ indexPagination });
 
     // redirecciona con js pasando el query al backend

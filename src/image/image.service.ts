@@ -13,7 +13,7 @@ import { Images } from '../entities'
 @Injectable()
 export class ImageService {
 
-  private storagePath = join( process.cwd(), 'public', 'static', 'uploads', 'images' );
+  private storagePath = join(__dirname, '..', '..', 'public', 'static', 'uploads', 'images');
   
   constructor( 
     @InjectRepository(Images)
@@ -61,6 +61,9 @@ export class ImageService {
           user: { id: idUser } 
           }) 
         );
+
+        // console.log(join( this.storagePath, fileName ));
+
         await saveImages( file.buffer, join( this.storagePath, fileName ) );
 
         resolve({ success: 'Imagen subida con exito' });
@@ -78,7 +81,7 @@ export class ImageService {
     });
   }
 
-  update(  form: Partial<ImageType>, file: Express.Multer.File  ): Promise<{ success: string }> {
+  update( form: Partial<ImageType>, file: Express.Multer.File  ): Promise<{ success: string }> {
     
     return new Promise( async ( resolve, reject ) => {
       
@@ -143,6 +146,7 @@ export class ImageService {
         await this.imageRepository.update( Number( form.id ), data );
         
         if ( file && data.imagePath ) {
+          // console.log(join( this.storagePath, fileName ));
           await saveImages( file.buffer, join( this.storagePath, fileName ) );
         }
 
