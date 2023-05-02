@@ -3,11 +3,13 @@ import { join } from 'path';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
+
 import * as csurf from 'csurf';
 import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
+
 import { INestApplication } from '@nestjs/common';
 
 import * as dotenv from 'dotenv';
@@ -26,8 +28,8 @@ async function bootstrap() {
   // configure the views, static assets and engine 
   app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets( join( __dirname, '..', 'public', 'static' ) );
-  app.setBaseViewsDir( join( __dirname, '..', 'public' ) )
-  app.setViewEngine('ejs')
+  app.setBaseViewsDir( join( __dirname, '..', 'public' ) );
+  app.setViewEngine('ejs');
   
   // set forms, session, middlewares, cookies and csrf protection
   // important: parse forms y cookie parser before send csrfmiddleware 
