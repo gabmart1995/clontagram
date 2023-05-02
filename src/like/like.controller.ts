@@ -45,7 +45,8 @@ export class LikeController {
       userLogged: session.user,
       likes,
       pagination,
-      totalLikes
+      totalLikes,
+      appName: process.env.APP_NAME || 'http://localhost:4201',
     };
   }
 

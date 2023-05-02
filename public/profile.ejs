@@ -1,4 +1,4 @@
-<%- include('partials/header')  -%> 
+<%- include('partials/header') -%>
 <%- include('partials/navbar') -%>
 
 <!-- JS components and libraries -->
@@ -7,39 +7,42 @@
 <script src="/js/like.helper.js"></script>
 
 <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
-  
-  <div class="profile-user align-self-center w-50">
-    <% if (user.image) { %>
-      <div class="container-avatar">
-        <img src="<%= user.image %> " alt="logo" class="img-avatar" />
-      </div>
-    <% } %>
-    <div class="info">
-      <h1>@<%= user.nick %></h1>
-      <h2><%= user.name %> <%= user.surname %></h2>
-      <p>Se unio: <span class="date"><%= user.createdAt %></span></p>
+
+    <div class="profile-user align-self-center w-50">
+        <% if (user.image) { %>
+            <div class="container-avatar">
+                <img src="<%= user.image %> " alt="logo" class="img-avatar" />
+            </div>
+        <% } %>
+        <div class="info">
+            <h1>@<%= user.nick %>
+            </h1>
+            <h2>
+                <%= user.name %> <%= user.surname %>
+            </h2>
+            <p>Se unio: <span class="date">
+                    <%= user.createdAt %>
+                </span>
+            </p>
+        </div>
+
+        <div class="clearfix"></div>
+        <hr class="mt-4">
     </div>
 
     <div class="clearfix"></div>
-    <hr class="mt-4">
-  </div>
 
-  <div class="clearfix"></div>
+    <% if (images.length> 0) { %>
 
-  <% if (images.length > 0) { %>
+        <!-- muestra las tarjetas de la imagen -->
+        <% images.forEach(( image, index ) => { %>
+            <%- include('partials/image', { image, index }) -%>
+        <% }) %>
+
+    <% } else { %>
+        <h3 class="mt-5" style="color: red;">Sin publicaciones</h3>
     
-    <!-- muestra las tarjetas de la imagen -->
-    <% images.forEach( ( image, index ) => { %>
-      <%- include('partials/image', { image, index }) -%>
-    <% }) %>
-  
-  <% } else { %>
-
-    <h3 class="mt-5" style="color: red;">Sin publicaciones</h3>
-  
-  <% } %> 
-
-  
+    <% } %>
 </div>
 
 <%- include('partials/footer') -%>

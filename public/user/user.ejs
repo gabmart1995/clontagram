@@ -1,4 +1,4 @@
-<%- include('../partials/header', { title })  -%> 
+<%- include('../partials/header', { title }) -%>
 <%- include('../partials/navbar', { userLogged }) -%>
 
 <!-- JS components and libraries -->
@@ -7,28 +7,23 @@
 <script src="/js/like.helper.js"></script>
 
 <div class="content-fluid d-flex flex-column align-items-center justify-content-center">
-  
-  <%- include('../partials/message', { errors }) %>
-  
-  <!-- muestra las tarjetas de la imagen -->
-  <% images.forEach( ( image, index ) => { %>
-    <%- include('../partials/image', { image, index }) %>
-  <% }) %>
 
-  <% if (images.length > 0) { %>
-    
-    <!-- pagination element -->
-    <pagination-component 
-      page="<%= pagination.page  %>" 
-      registers="<%= totalImages %>"
-      url="http://clontagram.local/user"
-    ></pagination-component>
+    <%- include('../partials/message', { errors }) %>
 
-  <% } else { %>
+    <!-- muestra las tarjetas de la imagen -->
+    <% images.forEach(( image, index ) => { %>
+        <%- include('../partials/image', { image, index }) %>
+    <% }) %>
 
-    <p class="text-danger mt-4">No se encontraron publicaciones</p>
-  
-  <% } %>
+    <% if (images.length> 0) { %>
+        <!-- pagination element -->
+        <pagination-component page="<%= pagination.page  %>" registers="<%= totalImages %>"
+            url="<%= appName %>/user"></pagination-component>
+
+    <% } else { %>
+        <p class="text-danger mt-4">No se encontraron publicaciones</p>
+
+    <% } %>
 </div>
 
 <%- include('../partials/footer') -%>

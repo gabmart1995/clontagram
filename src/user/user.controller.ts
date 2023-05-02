@@ -54,7 +54,8 @@ export class UserController {
       errors: errors ? JSON.parse(errors) : undefined,
       images,
       totalImages,
-      pagination
+      pagination,
+      appName: process.env.APP_NAME || 'http://localhost:4201'
     };
   }
 
@@ -195,7 +196,8 @@ export class UserController {
       userLogged: session.user,
       users,
       pagination,
-      totalUsers
+      totalUsers,
+      appName: process.env.APP_NAME || 'http://localhost:4201'
     };
   }
 

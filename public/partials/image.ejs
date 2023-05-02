@@ -1,45 +1,49 @@
 <div class="card card-login mb-2 pub_image <%= index === 0 ? 'mt-4' : '' %>">
-    
+
     <div class="card-header">
-      <div class="container-avatar">
-        <img src="<%= image.user.image %>" alt="avatar" class="img-avatar" />
-      </div>  
-      <div class="data-user">
-        <a href="/user/<%= image.user.id %>" style="text-decoration: none; color: #444;">
-          <%= ( image.user.name + ' ' + image.user.surname )  %>
-          <span class="nickname">| @<%= image.user.nick  %></span>
-        </a>
-      </div>
+        <div class="container-avatar">
+            <img src="<%= image.user.image %>" alt="avatar" class="img-avatar" />
+        </div>
+        <div class="data-user">
+            <a href="/user/<%= image.user.id %>" style="text-decoration: none; color: #444;">
+                <%= ( image.user.name + ' ' + image.user.surname ) %>
+                    <span class="nickname">| @<%= image.user.nick %></span>
+            </a>
+        </div>
     </div>
     <div class="card-body p-0">
-      <div class="img-container d-flex justify-content-center">
-        <img src="<%= image.imagePath %>"  alt="imagePath" />
-      </div>
-      <div class="description pb-0">
-        <span class="nickname">@<%= image.user.nick %></span>  
-        <span class="nickname">|</span> 
-        <span class="nickname date"><%= image.createdAt %></span> 
-        <p><%= image.description %></p>
-      </div>
-      <div class="likes">
-        
-        <!-- comprobar si el usuario le dio like al imagen -->
-        <% if ( image.likes.some( like => like.user.id === userLogged.id ) ) { %>
-          <i class="bi bi-heart-fill btn-like pointer" data-id="<%= image.id %>"></i> <!-- like marcado -->
-        
-        <% } else { %>
-          <i class="bi bi-heart-fill btn-dislike pointer" data-id="<%= image.id %>"></i>
-        
-        <% } %>
-        <!-- numero de likes -->
-        <span class="lighter likesCount number-likes">
-          <%= image.likes.length  %>
-        </span> 
-      </div>
-      <div class="comments">
-        <a href="/image/detail/<%= image.id %>" class="btn btn-warning btn-sm m-3 ms-0 mt-0">Comentarios 
-          (<%= image.comments.length %>)
-        </a>
-      </div>
+        <div class="img-container d-flex justify-content-center">
+            <img src="<%= image.imagePath %>" alt="imagePath" />
+        </div>
+        <div class="description pb-0">
+            <span class="nickname">@<%= image.user.nick %></span>
+            <span class="nickname">|</span>
+            <span class="nickname date">
+                <%= image.createdAt %>
+            </span>
+            <p>
+                <%= image.description %>
+            </p>
+        </div>
+        <div class="likes">
+
+            <!-- comprobar si el usuario le dio like al imagen -->
+            <% if ( image.likes.some( like=> like.user.id === userLogged.id ) ) { %>
+                <i class="bi bi-heart-fill btn-like pointer" data-id="<%= image.id %>"></i> <!-- like marcado -->
+
+            <% } else { %>
+                <i class="bi bi-heart-fill btn-dislike pointer" data-id="<%= image.id %>"></i>
+
+            <% } %>
+            <!-- numero de likes -->
+            <span class="lighter likesCount number-likes">
+                <%= image.likes.length %>
+            </span>
+        </div>
+        <div class="comments">
+            <a href="/image/detail/<%= image.id %>" class="btn btn-warning btn-sm m-3 ms-0 mt-0">Comentarios
+                (<%= image.comments.length %>)
+            </a>
+        </div>
     </div>
 </div>

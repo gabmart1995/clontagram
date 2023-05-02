@@ -23,10 +23,8 @@ let app: INestApplication & NestExpressApplication;
 async function bootstrap() {
   
   // indicate a express app
-  app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const csrfMiddleware = csurf({ cookie: true });
-
   // configure the views, static assets and engine 
+  app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets( join( __dirname, '..', 'public', 'static' ) );
   app.setBaseViewsDir( join( __dirname, '..', 'public' ) )
   app.setViewEngine('ejs')
@@ -49,7 +47,7 @@ async function bootstrap() {
     )
     .use( flash() )
     .use( cookieParser() )
-    .use( csrfMiddleware );
+    .use( csurf({ cookie: true }) );
   
   // ready server
   await app.listen(process.env.PORT, () => {
